@@ -15,6 +15,13 @@ body {
     background-color: var(--primary_purple);
     color: var(--font_white);
     font-family: 'Mulish';
+    padding-block: clamp(16px, 3.6vw, 48px);
+    padding-inline: clamp(8px, 3vw, 48px);
+}
+
+.wrapper{
+    max-width: 1920px;
+    margin-inline: auto;
 }
 
 .orange {
