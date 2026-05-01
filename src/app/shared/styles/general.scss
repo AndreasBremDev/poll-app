@@ -1,0 +1,27 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+:root {
+    --primary_orange: #FFB770;
+    --primary_purple: #35273A;
+    --secondary_orange: #FFCFA1;
+    --terciary_orange: #FEE9D4;
+    --font_white: #ffffff;
+}
+
+body {
+    background-color: var(--primary_purple);
+    color: var(--font_white);
+    font-family: 'Mulish';
+}
+
+.orange {
+    color: var(--primary_orange);
+}
+
+.purple {
+    color: var(--primary_purple);
+}
+
