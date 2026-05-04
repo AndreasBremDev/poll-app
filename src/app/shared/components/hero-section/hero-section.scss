@@ -1,28 +1,52 @@
+@use '../../styles/mixin.scss' as mx;
+
 .nerko {
     font-family: 'Nerko One';
     text-wrap: balance;
 }
 
-.hero-h1 {
-    font-size: clamp(48px, 13vw, 100px);
-    margin-top: clamp(54px, 11.2vw, 92px);
+.hero__section__parent {
+    @include mx.flex-direction-align-justify-gap(row, center, center, 32px);
 }
 
-.hero-p {
+.hero__section__child {
+    @include mx.flex-direction-align-justify-gap(column, flex-start);
+
+}
+
+.hero__section__h1 {
+    font-size: clamp(48px, 5.3vw, 100px);
+    margin-top: clamp(54px, 5.8vw, 92px);
+}
+
+.hero__section__p {
     font-size: clamp(18px, 3.75vw, 24px);
     font-weight: 600;
     margin-top: 24px;
 }
 
-.hero-image-mobile,
-.hero-image {
-    width: clamp(280px, 30vw, 420px);
+.hero__section__image--mobile,
+.hero__section__image {
+    min-width: 280px;
+    width: clamp(280px, 20vw, 420px);
     aspect-ratio: 1/1;
-    background: center / contain no-repeat url('/assets/img/poll-img_pc.png');
-    float: right;
 }
 
-.hero-image:hover {
+.hero__section__image {
+    background: center / contain no-repeat url('/assets/img/poll-img_pc.png');
+}
+
+.hero__section__image--mobile {
+    display: none;
+
+    @media (max-width: 768px) {
+        display: block;
+        align-self: center;
+    }
+}
+
+.hero__section__image--mobile,
+.hero__section__image:hover {
     background: center / contain no-repeat url('/assets/img/poll-img_mobile.png');
 }
 
