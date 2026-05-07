@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { HeroSection } from '../hero-section/hero-section';
-import { CurrentSection } from '../current-section/current-section';
+import { SoonSection } from '../soon-section/soon-section';
 
 @Component({
   selector: 'app-main-page',
-  imports: [HeroSection,CurrentSection],
+  imports: [HeroSection, SoonSection],
   templateUrl: './main-page.html',
   styleUrl: './main-page.scss',
 })

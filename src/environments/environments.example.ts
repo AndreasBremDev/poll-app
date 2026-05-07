@@ -1,5 +1,0 @@
-export const environment = {
-    production: false,
-    SUPABASE_URL: '<YOUR_SUPABASE_URL>',
-    SUPABASE_KEY:'<YOUR_SUPABASE_API-KEY>'
-}
