@@ -1,0 +1,26 @@
+<p>current-section works!</p>
+
+@for (poll of supabase.polls(); track poll.id) {
+
+    <!-- // <app-poll-item (inputPoll)="item()"> -->
+
+	<section>
+		<h3>{{ poll.title }}</h3>
+		<p>{{ poll.description }}</p>
+		<p>Kategorie: {{ poll.category }}</p>
+        <p>End-Datum: {{poll.enddate}}</p>
+
+		@for (pq of poll.poll_question; track pq.question.id) {
+			<h4>{{ pq.question.question }}</h4>
+
+			<ul>
+				@for (opt of pq.question.options; track opt.id) {
+					<li>{{ opt.option }} (Votes: {{ opt.vote }})</li>
+				}
+			</ul>
+		}
+	</section>
+}
+<br><br>
+<h4>Debug JSON</h4>
+<pre>{{ supabase.polls() | json }}</pre>
