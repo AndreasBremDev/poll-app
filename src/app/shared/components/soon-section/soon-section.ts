@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { Supabase } from '../../services/supabase';
 import { JsonPipe } from '@angular/common';
 
@@ -11,6 +11,19 @@ import { JsonPipe } from '@angular/common';
 })
 export class SoonSection {
   supabase = inject(Supabase)
+
+  public pollsWithCountdown = computed(() => {
+    const now = Date.now();
+    return this.supabase.polls().map(poll => {
+      let dateEndOfDay = new Date(poll.enddate)
+      dateEndOfDay.setHours(23, 59, 59, 999);
+      let diff = dateEndOfDay.getTime() - now;
+      return {
+        ...poll,
+        daysLeft: Math.floor(diff / (1000 * 60 * 60 * 24)),
+      };
+    });    
+  });
 
   ngOnInit() {
     this.supabase.getData()

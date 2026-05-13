@@ -1,0 +1,47 @@
+@use '../../styles/mixin.scss' as mx;
+
+.soon-section {
+    @include mx.flex-direction-align-justify-gap(row, center, flex-start, 32px);
+    overflow-x: auto;
+    max-height: 310px;
+}
+
+.soon-card {
+    width: clamp(240px, 240px, 310px);
+    min-width: clamp(240px, 240px, 310px);
+    aspect-ratio: 1/1;
+    border-radius: 0 80px 0 0;
+    background-color: var(--soon-card-light);
+    color: var(--primary_purple);
+    display: grid;
+    grid-auto-rows: 20px auto 20px;
+    padding: calc(240px * 0.1);
+    box-sizing: border-box;
+
+    &__title {
+        @include mx.flex-direction-align-justify-gap(row, center, flex-start);
+    }
+
+    @media (pointer:fine) and (hover:hover) {
+        &:hover {
+            cursor: pointer;
+            background-color: var(--soon-card-hover);
+
+            .soon-card__countdown {
+                background-color: var(--primary_orange);
+            }
+        }
+    }
+
+    &__countdown {
+        font-size: 16px; // px to rem - pending
+        background-color: var(--secondary_orange);
+        color: var(--primary_purple);
+        padding: 4px;
+        border-radius: 0 14px 0 0;
+        height: fit-content;
+        box-sizing: border-box;
+        width: fit-content;
+        transition: background-color 0.3s ease;
+    }
+}

@@ -1,17 +1,18 @@
 <br>
 <p>soon-section works!</p>
 <br>
-@for (poll of supabase.polls(); track poll.id) {
+<section class="soon-section">
+	@for (poll of pollsWithCountdown(); track poll.id) {
 
-    <!-- // <app-poll-item (inputPoll)="item()"> -->
+	<!-- // <app-poll-item (inputPoll)="item()"> -->
 
-	<section>
-		<h3>{{ poll.title }}</h3>
-		<p>{{ poll.description }}</p>
-		<p>Kategorie: {{ poll.category }}</p>
-        <p>End-Datum: {{poll.enddate}}</p>
+	<article class="soon-card">
+		<p >{{ poll.category }}</p>
+		<h3 class="soon-card__title">{{ poll.title }}</h3>
+		<!-- <p>{{ poll.description }}</p> -->
+		<p class="soon-card__countdown">Ends in {{ poll.daysLeft }} @if (poll.daysLeft == 1 || poll.daysLeft == -1) {day} @else {days}</p>
 
-		@for (pq of poll.poll_question; track pq.question.id) {
+		<!-- @for (pq of poll.poll_question; track pq.question.id) {
 			<h4>{{ pq.question.question }}</h4>
 
 			<ul>
@@ -19,9 +20,10 @@
 					<li>{{ opt.option }} (Votes: {{ opt.vote }})</li>
 				}
 			</ul>
-		}
-	</section>
-}
+		} -->
+	</article>
+	}
+</section>
 <br><br>
 <h4>Debug JSON</h4>
 <pre>{{ supabase.polls() | json }}</pre>
