@@ -4,11 +4,21 @@
     @include mx.flex-direction-align-justify-gap(row, center, flex-start, 32px);
     overflow-x: auto;
     max-height: 310px;
+
+    &__h2 {
+        font-size: mx.calculate-clamp(40px, 72px);
+        margin-top: mx.calculate-clamp(80px, 90px);
+    }
+    &__p {
+        font-size: mx.calculate-clamp(24px, 32px);
+        margin-top: mx.calculate-clamp(48px, 56px);
+        margin-bottom: mx.calculate-clamp(16px, 32px);
+    }
 }
 
 .soon-card {
-    width: clamp(240px, 240px, 310px);
-    min-width: clamp(240px, 240px, 310px);
+    width: mx.calculate-clamp(240px, 310px);
+    min-width: 240px;
     aspect-ratio: 1/1;
     border-radius: 0 80px 0 0;
     background-color: var(--soon-card-light);
@@ -18,8 +28,10 @@
     padding: calc(240px * 0.1);
     box-sizing: border-box;
 
-    &__title {
+    &__h3 {
         @include mx.flex-direction-align-justify-gap(row, center, flex-start);
+        font-size: 26px; // px to rem - pending
+        font-weight: 700;
     }
 
     @media (pointer:fine) and (hover:hover) {

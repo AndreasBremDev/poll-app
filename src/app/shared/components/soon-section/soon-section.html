@@ -1,18 +1,23 @@
-<br>
-<p>soon-section works!</p>
-<br>
-<section class="soon-section">
-	@for (poll of pollsWithCountdown(); track poll.id) {
+<main class="wrapper">
 
-	<!-- // <app-poll-item (inputPoll)="item()"> -->
+	<h2 class="soon-section__h2 nerko orange">Your surveys</h2>
 
-	<article class="soon-card">
-		<p >{{ poll.category }}</p>
-		<h3 class="soon-card__title">{{ poll.title }}</h3>
-		<!-- <p>{{ poll.description }}</p> -->
-		<p class="soon-card__countdown">Ends in {{ poll.daysLeft }} @if (poll.daysLeft == 1 || poll.daysLeft == -1) {day} @else {days}</p>
+	<p class="soon-section__p">Ending soon surveys</p>
 
-		<!-- @for (pq of poll.poll_question; track pq.question.id) {
+	<section class="soon-section">
+
+		@for (poll of pollsWithDaysLeft(); track poll.id) {
+
+		<!-- // <app-poll-item (inputPoll)="item()"> -->
+		@if (poll.daysLeft >= 0) {
+		<article class="soon-card">
+			<p>{{ poll.category }}</p>
+			<h3 class="soon-card__h3">{{ poll.title }}</h3>
+			<!-- <p>{{ poll.description }}</p> -->
+			<p class="soon-card__countdown">Ends in {{ poll.daysLeft }} @if (poll.daysLeft == 1 || poll.daysLeft == -1)
+				{day} @else {days}</p>
+
+			<!-- @for (pq of poll.poll_question; track pq.question.id) {
 			<h4>{{ pq.question.question }}</h4>
 
 			<ul>
@@ -21,9 +26,12 @@
 				}
 			</ul>
 		} -->
-	</article>
-	}
-</section>
-<br><br>
+		</article>
+		}
+		}
+	</section>
+</main>
+
+<!-- <br><br>
 <h4>Debug JSON</h4>
-<pre>{{ supabase.polls() | json }}</pre>
+<pre>{{ supabase.polls() | json }}</pre> -->

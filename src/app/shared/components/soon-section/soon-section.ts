@@ -1,18 +1,18 @@
 import { Component, inject, computed } from '@angular/core';
 import { Supabase } from '../../services/supabase';
-import { JsonPipe } from '@angular/common';
+// import { JsonPipe } from '@angular/common';
 
 
 @Component({
   selector: 'app-soon-section',
-  imports: [JsonPipe],
+  imports: [/* JsonPipe */],
   templateUrl: './soon-section.html',
   styleUrl: './soon-section.scss',
 })
 export class SoonSection {
   supabase = inject(Supabase)
 
-  public pollsWithCountdown = computed(() => {
+  public pollsWithDaysLeft = computed(() => {
     const now = Date.now();
     return this.supabase.polls().map(poll => {
       let dateEndOfDay = new Date(poll.enddate)
