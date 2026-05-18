@@ -1,19 +1,22 @@
-<main class="wrapper">
+<section class="wrapper">
 
 	<h2 class="soon-section__h2 nerko orange">Your surveys</h2>
 
 	<p class="soon-section__p">Ending soon surveys</p>
 
-	<section class="soon-section">
+	<div class="soon-section">
 
-		@for (poll of pollsWithDaysLeft(); track poll.id) {
+		@for (poll of supabase.pollsWithDaysLeft(); track poll.id) {
 
 		<!-- // <app-poll-item (inputPoll)="item()"> -->
+
 		@if (poll.daysLeft >= 0) {
 		<article class="soon-card">
 			<p>{{ poll.category }}</p>
 			<h3 class="soon-card__h3">{{ poll.title }}</h3>
+
 			<!-- <p>{{ poll.description }}</p> -->
+			
 			<p class="soon-card__countdown">Ends in {{ poll.daysLeft }} @if (poll.daysLeft == 1 || poll.daysLeft == -1)
 				{day} @else {days}</p>
 
@@ -25,12 +28,13 @@
 					<li>{{ opt.option }} (Votes: {{ opt.vote }})</li>
 				}
 			</ul>
-		} -->
+			} -->
+
 		</article>
 		}
 		}
-	</section>
-</main>
+	</div>
+</section>
 
 <!-- <br><br>
 <h4>Debug JSON</h4>
