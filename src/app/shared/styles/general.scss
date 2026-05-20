@@ -8,7 +8,9 @@
     --primary_orange: #FFB770;
     --primary_purple: #35273A;
     --secondary_orange: #FFCFA1;
+    --secondary_purple: #D9D9D914;
     --terciary_orange: #FEE9D4;
+    --terciary_purple: #D9D9D929;
     --font_white: #ffffff;
     --soon-card-light: #FAF5FE;
     --soon-card-hover: #F4E9FB;
@@ -38,4 +40,14 @@ body {
 .nerko {
     font-family: 'Nerko One';
     text-wrap: balance;
+}
+
+button, select {
+    background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	outline: inherit;
+	cursor: pointer;
 }

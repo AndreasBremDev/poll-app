@@ -12,19 +12,6 @@ import { Supabase } from '../../services/supabase';
 export class SoonSection {
   supabase = inject(Supabase)
 
-  // public pollsWithDaysLeft = computed(() => {
-  //   const now = Date.now();
-  //   return this.supabase.polls().map(poll => {
-  //     let dateEndOfDay = new Date(poll.enddate)
-  //     dateEndOfDay.setHours(23, 59, 59, 999);
-  //     let diff = dateEndOfDay.getTime() - now;
-  //     return {
-  //       ...poll,
-  //       daysLeft: Math.floor(diff / (1000 * 60 * 60 * 24)),
-  //     };
-  //   }).sort((a, b) => a.daysLeft - b.daysLeft);    
-  // });
-
   ngOnInit() {
     this.supabase.getData()
   }

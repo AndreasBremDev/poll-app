@@ -1,0 +1,121 @@
+@use '../../styles/mixin.scss' as mx;
+
+.list {
+  &__selectors {
+    margin-block: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    @media (max-width: 495px) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    &__section {
+      display: flex;
+      gap: 24px;
+
+      // @media (max-width: 495px) {
+      //   flex-direction: column;
+      //   gap: 4px;
+      //   min-width: 168px;
+      // }
+    }
+
+    &__btn {
+      background-color: var(--terciary_orange);
+      color: var(--primary_purple);
+      padding: 2px 10px;
+      border-radius: 20px;
+
+      &:hover {
+        background-color: var(--secondary_orange);
+      }
+
+      &:active,
+      &:focus-visible {
+        background-color: var(--primary_orange);
+      }
+    }
+  }
+
+  &__survey-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+
+  &__card {
+    border-radius: 0 80px 0 0;
+    background-color: var(--secondary_purple);
+    color: var(--font_white);
+    display: grid;
+    grid-auto-rows: 20px auto 20px;
+    padding: calc(240px * 0.1);
+    box-sizing: border-box;
+
+    &__p {
+      color: var(--primary_orange)
+    }
+
+    &__h3 {
+      @include mx.flex-direction-align-justify-gap(row, center, flex-start);
+      font-size: 24px; // px to rem - pending
+      font-weight: 700;
+      margin: 8px 0 24px 0;
+    }
+
+    &__countdown {
+      justify-self: end;
+      font-size: 16px; // px to rem - pending
+      background-color: var(--secondary_orange);
+      color: var(--primary_purple);
+      padding: 3px 6px;
+      border-radius: 0 14px 0 0;
+      height: fit-content;
+      box-sizing: border-box;
+      width: fit-content;
+    }
+  }
+}
+
+select {
+  border-radius: 6px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  -moz-padding-start: calc(10px - 3px);
+  padding-left: 10px;
+}
+
+select:hover {
+  background-color: var(--secondary_purple);
+}
+
+select::picker-icon {
+  color: var(--primary_orange);
+  transition: 0.4s rotate;
+}
+
+select:open::picker-icon {
+  rotate: 180deg;
+}
+
+select option {
+  color: var(--primary_orange);
+  cursor: pointer;
+}
+
+
+// ::picker(select) {
+//   border: none;
+//   border-radius: 8px;
+//   color: var(--primary_purple);
+// }

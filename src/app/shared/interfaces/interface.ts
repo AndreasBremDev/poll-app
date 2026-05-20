@@ -10,11 +10,18 @@ export interface Question {
     options: Option[]
 }
 
+export interface Categories {
+    id: number,
+    category: string
+}
+
+
 export interface Poll {
     id: number,
     title: string,
     description: string,
-    category: string,
     enddate: string,
+    "category-id": number,
+    categories: Categories,
     poll_question: { question: Question }[]
 }

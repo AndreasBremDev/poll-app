@@ -1,5 +1,53 @@
-<p>list-servey-section works!</p>
-
 <section class="list__selectors">
-
+    <div class="list__selectors__section">
+        <button class="list__selectors__btn">Active survey</button>
+        <button class="list__selectors__btn">Past survey</button>
+    </div>
+    <select>
+        <button>
+            <selectedcontent></selectedcontent>
+        </button>
+        <option value="" selected disabled>Sort by category</option>
+        <hr/>
+        <option value="all">All categories</option>
+        @for (cat of supabase.categories(); track cat.id){
+        <option value="{{ cat.id }}">{{ cat.category }}</option>
+        }
+    </select>
 </section>
+
+<section class="wrapper">
+
+    <div class="list__survey-section">
+
+        @for (poll of supabase.pollsWithDaysLeft(); track poll.id) {
+
+        <!-- // <app-poll-item (inputPoll)="item()"> -->
+
+        <article class="list__card">
+            <p class="list__card__p">{{ poll.categories.category }}</p>
+            <h3 class="list__card__h3">{{ poll.title }}</h3>
+
+            <!-- <p>{{ poll.description }}</p> -->
+
+            <p class="list__card__countdown">Ends in {{ poll.daysLeft }} @if (poll.daysLeft == 1 || poll.daysLeft == -1)
+                {day} @else {days}</p>
+
+            <!-- @for (pq of poll.poll_question; track pq.question.id) {
+			<h4>{{ pq.question.question }}</h4>
+
+			<ul>
+				@for (opt of pq.question.options; track opt.id) {
+					<li>{{ opt.option }} (Votes: {{ opt.vote }})</li>
+				}
+			</ul>
+			} -->
+
+        </article>
+        }
+    </div>
+</section>
+
+<br><br>
+<h4>Debug JSON</h4>
+<pre>{{ supabase.polls() | json }}</pre>

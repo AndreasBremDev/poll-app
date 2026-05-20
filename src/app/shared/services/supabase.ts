@@ -1,21 +1,23 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { createClient, RealtimeChannel } from '@supabase/supabase-js'
-import { Poll } from '../interfaces/interface'
+import { Categories, Poll } from '../interfaces/interface'
 import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Supabase {
-  
+
   supabase = createClient(environment.SUPABASE_URL, environment.SUPABASE_KEY);
 
   polls = signal<Poll[]>([]);
 
-  async getData(/* pollId: number */) {  
+  categories = signal<Categories[]>([]);
+
+  async getData(/* pollId: number */) {
     const { data, error } = await this.supabase
       .from('polls')
-      .select(`*, poll_question!inner ( question: questions ( *,
+      .select(`*, categories (*), poll_question!inner ( question: questions ( *,
                     options (*) ) ) `);
     if (error) {
       console.error("Supabase Error:", error.message);
@@ -24,7 +26,7 @@ export class Supabase {
     }
   }
 
-  public pollsWithDaysLeft = computed(() => {
+  pollsWithDaysLeft = computed(() => {
     const now = Date.now();
     return this.polls().map(poll => {
       let dateEndOfDay = new Date(poll.enddate)
@@ -34,7 +36,19 @@ export class Supabase {
         ...poll,
         daysLeft: Math.floor(diff / (1000 * 60 * 60 * 24)),
       };
-    }).sort((a, b) => a.daysLeft - b.daysLeft);    
+    }).sort((a, b) => a.daysLeft - b.daysLeft);
   });
+
+  async getCategories() {
+    const { data, error } = await this.supabase
+      .from('categories')
+      .select('*');
+    if (error) {
+      console.error("Supabase Error:", error.message);
+    } else {
+      this.categories.set(data as Categories[]);
+    }
+  }
+
 
 }
