@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { Supabase } from '../../services/supabase';
 import { JsonPipe } from '@angular/common';
 
@@ -11,8 +11,28 @@ import { JsonPipe } from '@angular/common';
 export class ListServeySection {
   supabase = inject(Supabase)
 
-  ngOnInit() {
-    this.supabase.getCategories()
+  selectedCategory = signal<string|number>('all')
+
+  async ngOnInit(): Promise<void> {
+    await this.supabase.getCategories()
   }
+
+  filterdPolls = computed(() => {
+    const category: string | number = this.selectedCategory();
+    if (category === 'all') return this.supabase.polls();
+    console.log('all polls: ',this.supabase.polls());
+    
+    return this.supabase.polls().filter(poll => poll.categories.id === category);
+
+  });
+
+  onChangeCategory(category: any): void {
+    this.selectedCategory.set(category)
+    console.log('selected category: ',this.selectedCategory());
+    
+  }
+
+
+
 }
 

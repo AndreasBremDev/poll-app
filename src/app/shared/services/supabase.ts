@@ -11,8 +11,11 @@ export class Supabase {
   supabase = createClient(environment.SUPABASE_URL, environment.SUPABASE_KEY);
 
   polls = signal<Poll[]>([]);
-
   categories = signal<Categories[]>([]);
+
+  ngOnInit(): void {
+    
+  }
 
   async getData(/* pollId: number */) {
     const { data, error } = await this.supabase
