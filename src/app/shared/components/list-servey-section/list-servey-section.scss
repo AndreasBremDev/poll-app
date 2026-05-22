@@ -1,6 +1,19 @@
 @use '../../styles/mixin.scss' as mx;
 
 .list {
+  &__select-wrapper {
+    position: relative;
+
+    &::before {
+      content: "v";
+      position: absolute;
+      right: 10px;
+      top: 3px;
+      pointer-events: none;
+      transition: 125ms rotate;
+    }
+  }
+
   &__selectors {
     margin-block: 40px;
     display: flex;
@@ -91,25 +104,34 @@ select {
   border: none;
   outline: none;
   cursor: pointer;
-  -moz-padding-start: calc(10px - 3px);
-  padding-left: 10px;
+  -moz-padding: 4px 6px 4px calc(10px - 3px);
+  padding: 4px 6px 4px 10px;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  margin-bottom: 4px;
 }
 
 select:hover {
   background-color: var(--secondary_purple);
 }
 
-select::picker-icon {
-  color: var(--primary_orange);
-  transition: 0.4s rotate;
+select:focus::-ms-value {
+  background-color: transparent;
 }
 
-select:open::picker-icon {
-  rotate: 180deg;
-}
+// select::picker-icon {
+//   color: var(--primary_orange);
+//   transition: 0.4s rotate;
+// }
+
+// select:open::picker-icon {
+//   rotate: 180deg;
+// }
 
 select option {
-  color: var(--primary_orange);
+  color: var(--primary_purple);
+  background-color: var(--soon-card-light);
   cursor: pointer;
 }
 

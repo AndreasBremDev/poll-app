@@ -3,17 +3,19 @@
         <button class="list__selectors__btn">Active survey</button>
         <button class="list__selectors__btn">Past survey</button>
     </div>
-    <select>
-        <button>
-            <selectedcontent></selectedcontent>
-        </button>
-        <option value="" selected disabled>Sort by category</option>
-        <hr/>
-        <option value="all">All categories</option>
-        @for (cat of supabase.categories(); track cat.id){
-        <option value="{{ cat.id }}">{{ cat.category }}</option>
-        }
-    </select>
+    <div class="list__select-wrapper">
+        <select>
+            <button>
+                <selectedcontent></selectedcontent>
+            </button>
+            <option value="" selected disabled>Sort by category</option>
+            <hr />
+            <option value="all">All categories</option>
+            @for (cat of supabase.categories(); track cat.id){
+            <option value="{{ cat.id }}">{{ cat.category }}</option>
+            }
+        </select>
+    </div>
 </section>
 
 <section class="wrapper">
@@ -30,8 +32,10 @@
 
             <!-- <p>{{ poll.description }}</p> -->
 
-            <p class="list__card__countdown">Ends in {{ poll.daysLeft }} @if (poll.daysLeft == 1 || poll.daysLeft == -1)
-                {day} @else {days}</p>
+            <p class="list__card__countdown">@if (poll.daysLeft >= 0) {
+                Ends in {{ poll.daysLeft }} @if (poll.daysLeft == 1 || poll.daysLeft == -1) {
+                day } @else {days}
+                } @else {Ended}</p>
 
             <!-- @for (pq of poll.poll_question; track pq.question.id) {
 			<h4>{{ pq.question.question }}</h4>

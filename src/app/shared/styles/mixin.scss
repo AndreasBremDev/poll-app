@@ -7,9 +7,7 @@
 }
 
 @function calculate-clamp($min-size, $max-size, $min-vp: 320px, $max-vp: 1920px) {
-    $slope: (
-        $max-size - $min-size) / ($max-vp - $min-vp
-    );
+    $slope: calc(($max-size - $min-size) / ($max-vp - $min-vp));
 $y-intercept: $min-size - $slope * $min-vp;
 
 // Rückgabe als clamp-String mit vw-Wert

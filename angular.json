@@ -42,6 +42,8 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
+            "baseHref": "/angular-projects/poll-app/",
+            "deployUrl": "/angular-projects/poll-app/",
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
