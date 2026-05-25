@@ -14,7 +14,7 @@ export class Supabase {
   categories = signal<Categories[]>([]);
 
   ngOnInit(): void {
-    
+
   }
 
   async getData(/* pollId: number */) {
@@ -24,8 +24,23 @@ export class Supabase {
                     options (*) ) ) `);
     if (error) {
       console.error("Supabase Error:", error.message);
+      return;
     } else {
       this.polls.set(data as Poll[]);
+      return data as Poll[];
+    }
+  }
+
+  async getCategories() {
+    const { data, error } = await this.supabase
+      .from('categories')
+      .select('*');
+    if (error) {
+      console.error("Supabase Error:", error.message);
+      return;
+    } else {
+      this.categories.set(data as Categories[]);
+      return data as Categories[];
     }
   }
 
@@ -41,17 +56,6 @@ export class Supabase {
       };
     }).sort((a, b) => a.daysLeft - b.daysLeft);
   });
-
-  async getCategories() {
-    const { data, error } = await this.supabase
-      .from('categories')
-      .select('*');
-    if (error) {
-      console.error("Supabase Error:", error.message);
-    } else {
-      this.categories.set(data as Categories[]);
-    }
-  }
 
 
 }

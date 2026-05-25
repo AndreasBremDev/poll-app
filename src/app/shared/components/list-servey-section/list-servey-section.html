@@ -4,8 +4,8 @@
         <button class="list__selectors__btn">Past survey</button>
     </div>
     <div class="list__select-wrapper">
-        <!-- <select (change)="onChangeCategory($any($event.target).value)"> -->
-        <select>
+        <select (change)="onChangeCategory($any($event.target).value)">
+            <!-- <select> -->
             <button>
                 <selectedcontent></selectedcontent>
             </button>
@@ -13,7 +13,7 @@
             <hr />
             <option value="all">All categories</option>
             @for (cat of supabase.categories(); track cat.id){
-            <option value="{{ cat.id }}">{{ cat.category }}</option>
+            <option value="{{ cat.category }}">{{ cat.category }}</option>
             }
         </select>
     </div>
@@ -23,7 +23,7 @@
 
     <div class="list__survey-section">
 
-        @for (poll of supabase.pollsWithDaysLeft(); track poll.id) {
+        @for (poll of filteredPolls(); track poll.id) { <!-- supabase.pollsWithDaysLeft() -->
 
         <!-- // <app-poll-item (inputPoll)="item()"> -->
 
@@ -31,12 +31,13 @@
             <p class="list__card__p">{{ poll.categories.category }}</p>
             <h3 class="list__card__h3">{{ poll.title }}</h3>
 
-            <!-- <p>{{ poll.description }}</p> -->
 
-            <p class="list__card__countdown">@if (poll.daysLeft >= 0) {
+            <!-- <p class="list__card__countdown">@if (poll.daysLeft >= 0) {
                 Ends in {{ poll.daysLeft }} @if (poll.daysLeft == 1 || poll.daysLeft == -1) {
-                day } @else {days}
-                } @else {Ended}</p>
+                    day } @else {days}
+                } @else {Ended}</p> -->
+            
+            <!-- <p>{{ poll.description }}</p> -->
 
             <!-- @for (pq of poll.poll_question; track pq.question.id) {
 			<h4>{{ pq.question.question }}</h4>
