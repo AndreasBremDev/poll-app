@@ -26,15 +26,14 @@ export class Supabase {
       console.error("Supabase Error:", error.message);
       return;
     } else {
-      this.polls.set(data as Poll[]);
-      return data as Poll[];
+      const processedPolls = this.addAndSortDaysLeft(data as Poll[]);
+      this.polls.set(processedPolls);
+      return processedPolls;
     }
   }
 
   async getCategories() {
-    const { data, error } = await this.supabase
-      .from('categories')
-      .select('*');
+    const { data, error } = await this.supabase.from('categories').select('*');
     if (error) {
       console.error("Supabase Error:", error.message);
       return;
@@ -44,9 +43,9 @@ export class Supabase {
     }
   }
 
-  pollsWithDaysLeft = computed(() => {
+  addAndSortDaysLeft(rawPolls: Poll[]): Poll[] {
     const now = Date.now();
-    return this.polls().map(poll => {
+    return rawPolls.map(poll => {
       let dateEndOfDay = new Date(poll.enddate)
       dateEndOfDay.setHours(23, 59, 59, 999);
       let diff = dateEndOfDay.getTime() - now;
@@ -55,7 +54,20 @@ export class Supabase {
         daysLeft: Math.floor(diff / (1000 * 60 * 60 * 24)),
       };
     }).sort((a, b) => a.daysLeft - b.daysLeft);
-  });
+  }
+
+  // pollsWithDaysLeft = computed(() => {
+  //   const now = Date.now();
+  //   return this.polls().map(poll => {
+  //     let dateEndOfDay = new Date(poll.enddate)
+  //     dateEndOfDay.setHours(23, 59, 59, 999);
+  //     let diff = dateEndOfDay.getTime() - now;
+  //     return {
+  //       ...poll,
+  //       daysLeft: Math.floor(diff / (1000 * 60 * 60 * 24)),
+  //     };
+  //   }).sort((a, b) => a.daysLeft - b.daysLeft);
+  // });
 
 
 }

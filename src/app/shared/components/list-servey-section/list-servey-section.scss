@@ -4,7 +4,7 @@
   &__select-wrapper {
     position: relative;
 
-    &::before {
+    &::after {
       content: "v";
       position: absolute;
       right: 10px;
@@ -21,20 +21,15 @@
     justify-content: space-between;
     align-items: center;
 
-    @media (max-width: 495px) {
+    @media (max-width: 560px) {
       flex-direction: column;
       align-items: flex-start;
+      gap: 24px;
     }
 
     &__section {
       display: flex;
       gap: 24px;
-
-      // @media (max-width: 495px) {
-      //   flex-direction: column;
-      //   gap: 4px;
-      //   min-width: 168px;
-      // }
     }
 
     &__btn {
@@ -43,12 +38,13 @@
       padding: 2px 10px;
       border-radius: 20px;
 
-      &:hover {
+      &:hover,
+      &:active,
+      &:focus-visible {
         background-color: var(--secondary_orange);
       }
 
-      &:active,
-      &:focus-visible {
+      &.active {
         background-color: var(--primary_orange);
       }
     }
@@ -58,6 +54,9 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
+    cursor: pointer;
+    margin-bottom: mx.calculate-clamp(16px,48px);
+
 
     @media (max-width: 768px) {
       grid-template-columns: 1fr;
@@ -73,6 +72,7 @@
     grid-auto-rows: 20px auto 20px;
     padding: calc(240px * 0.1);
     box-sizing: border-box;
+    min-height: 150px;
 
     &__p {
       color: var(--primary_orange)
@@ -110,14 +110,23 @@ select {
   -webkit-appearance: none;
   appearance: none;
   margin-bottom: 4px;
+  width: 250px;
 }
 
-select:hover {
+select:hover,
+select:active,
+select:focus-visible {
   background-color: var(--secondary_purple);
 }
 
 select:focus::-ms-value {
-  background-color: transparent;
+  background-color: var(--font_white);
+}
+
+select option {
+  color: var(--primary_purple);
+  background-color: var(--soon-card-light);
+  cursor: pointer;
 }
 
 // select::picker-icon {
@@ -128,12 +137,6 @@ select:focus::-ms-value {
 // select:open::picker-icon {
 //   rotate: 180deg;
 // }
-
-select option {
-  color: var(--primary_purple);
-  background-color: var(--soon-card-light);
-  cursor: pointer;
-}
 
 
 // ::picker(select) {

@@ -23,5 +23,8 @@ export interface Poll {
     enddate: string,
     "category-id": number,
     categories: Categories,
-    poll_question: { question: Question }[]
+    poll_question: { question: Question }[],
+    daysLeft: number;
 }
+
+export type SurveyStatus = 'active' | 'past';

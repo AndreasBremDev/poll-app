@@ -1,6 +1,6 @@
-import { Component, inject, computed } from '@angular/core';
+import { Component, inject, computed, signal } from '@angular/core';
 import { Supabase } from '../../services/supabase';
-// import { JsonPipe } from '@angular/common';
+import { Poll } from '../../interfaces/interface';
 
 
 @Component({
@@ -10,9 +10,18 @@ import { Supabase } from '../../services/supabase';
   styleUrl: './soon-section.scss',
 })
 export class SoonSection {
-  supabase = inject(Supabase)
+  supabase = inject(Supabase);
+  polls = signal<Poll[]>([]);
 
-  ngOnInit() {
-    this.supabase.getData()
+  async ngOnInit(): Promise<void> {
+    this.polls.set(await this.supabase.getData() || []);
   }
+
+  daysFilteredPolls = computed(() => {
+    const allPolls = this.polls();
+    const filteredByDays = allPolls.filter(poll => poll.daysLeft >= 0);
+    console.log(filteredByDays);
+    return filteredByDays;
+  });
+
 }
