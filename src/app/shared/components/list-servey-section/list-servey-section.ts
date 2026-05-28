@@ -51,8 +51,11 @@ export class ListServeySection {
     this.pollCategories = await this.supabase.getCategories() || [];
   }
 
-  onChangeCategory(value: string): void {
-    this.selectedCategory.set(value)
+  onChangeCategory(event: Event): void {
+    const selectElement = event.target as HTMLSelectElement;
+    const value = selectElement.value;
+    this.selectedCategory.set(value);
+    selectElement.blur();
   }
 
   onChangeStatus(value: 'active' | 'past'): void {

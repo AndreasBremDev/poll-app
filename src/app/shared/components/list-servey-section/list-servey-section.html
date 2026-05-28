@@ -7,12 +7,8 @@
                 [class.active]="selectedStatus() === 'past'">Past survey</button>
         </div>
         <div class="list__select-wrapper">
-            <select (change)="onChangeCategory($any($event.target).value)" id="selectedCategory" tabindex="0">
-                <button>
-                    <selectedcontent></selectedcontent>
-                </button>
+            <select (change)="onChangeCategory($event)" id="selectedCategory" tabindex="0">
                 <option value="" selected disabled>Sort by category</option>
-                <hr />
                 <option value="all">All categories</option>
                 @for (cat of supabase.categories(); track cat.id){
                 <option value="{{ cat.category }}">{{ cat.category }}</option>
