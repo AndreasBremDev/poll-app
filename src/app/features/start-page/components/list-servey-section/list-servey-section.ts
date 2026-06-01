@@ -1,6 +1,6 @@
 import { Component, inject, signal, computed } from '@angular/core';
-import { Supabase } from '../../services/supabase';
-import { Poll, Categories, SurveyStatus } from '../../interfaces/interface';
+import { Supabase } from '../../../../shared/services/supabase';
+import { Poll, Categories, SurveyStatus } from '../../../../shared/interfaces/interface';
 
 
 @Component({
@@ -10,15 +10,14 @@ import { Poll, Categories, SurveyStatus } from '../../interfaces/interface';
   styleUrl: './list-servey-section.scss',
 })
 export class ListServeySection {
+  
   supabase = inject(Supabase)
-  polls = signal<Poll[]>([]);
-  pollCategories: Categories[] = [];
   selectedCategory = signal<string>('all');
   selectedStatus = signal<SurveyStatus>('active');
 
 
   filteredPolls = computed(() => {
-    const allPolls = this.polls();
+    const allPolls = this.supabase.polls();
     const status: SurveyStatus = this.selectedStatus();
     const category: string = this.selectedCategory();
     const filteredStatus = this.filterStatus_filteredPolls(allPolls, status);
@@ -45,11 +44,6 @@ export class ListServeySection {
       return filteredStatus.filter(poll => poll.categories.category === category);
     }
   };
-
-  async ngOnInit(): Promise<void> {
-    this.polls.set(await this.supabase.getData() || []);
-    this.pollCategories = await this.supabase.getCategories() || [];
-  }
 
   onChangeCategory(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;

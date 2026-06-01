@@ -1,4 +1,4 @@
-@use '../../styles/mixin.scss' as mx;
+@use '../../../../shared/styles/mixin.scss' as mx;
 
 .soon-section {
     @include mx.flex-direction-align-justify-gap(row, center, flex-start, 32px);

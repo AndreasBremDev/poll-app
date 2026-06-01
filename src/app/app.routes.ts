@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { MainPage } from './shared/components/main-page/main-page';
+import { StartPage } from './features/start-page/start-page';
 
 export const routes: Routes = [
     {
         path:'',
-        component: MainPage
+        component: StartPage
     }
 ];

@@ -31,6 +31,19 @@ export class Supabase {
       return processedPolls;
     }
   }
+  
+    addAndSortDaysLeft(rawPolls: Poll[]): Poll[] {
+      const now = Date.now();
+      return rawPolls.map(poll => {
+        let dateEndOfDay = new Date(poll.enddate)
+        dateEndOfDay.setHours(23, 59, 59, 999);
+        let diff = dateEndOfDay.getTime() - now;
+        return {
+          ...poll,
+          daysLeft: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        };
+      }).sort((a, b) => a.daysLeft - b.daysLeft);
+    }
 
   async getCategories() {
     const { data, error } = await this.supabase.from('categories').select('*');
@@ -42,32 +55,5 @@ export class Supabase {
       return data as Categories[];
     }
   }
-
-  addAndSortDaysLeft(rawPolls: Poll[]): Poll[] {
-    const now = Date.now();
-    return rawPolls.map(poll => {
-      let dateEndOfDay = new Date(poll.enddate)
-      dateEndOfDay.setHours(23, 59, 59, 999);
-      let diff = dateEndOfDay.getTime() - now;
-      return {
-        ...poll,
-        daysLeft: Math.floor(diff / (1000 * 60 * 60 * 24)),
-      };
-    }).sort((a, b) => a.daysLeft - b.daysLeft);
-  }
-
-  // pollsWithDaysLeft = computed(() => {
-  //   const now = Date.now();
-  //   return this.polls().map(poll => {
-  //     let dateEndOfDay = new Date(poll.enddate)
-  //     dateEndOfDay.setHours(23, 59, 59, 999);
-  //     let diff = dateEndOfDay.getTime() - now;
-  //     return {
-  //       ...poll,
-  //       daysLeft: Math.floor(diff / (1000 * 60 * 60 * 24)),
-  //     };
-  //   }).sort((a, b) => a.daysLeft - b.daysLeft);
-  // });
-
 
 }
