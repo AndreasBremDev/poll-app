@@ -3,7 +3,7 @@
 .view {
     &__box {
         &__servey-results {
-            @include mx.flex-direction-align-justify-gap(row, start, center, 42px);
+            @include mx.flex-direction-align-justify-gap(row, flex-start, flex-start, 42px);
             border: 1px solid green;
 
             @media (max-width: 768px) {

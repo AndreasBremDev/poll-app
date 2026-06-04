@@ -9,23 +9,27 @@
 
             <!-- // <app-poll-item (inputPoll)="item()"> -->
 
-            <article class="soon-card">
+            <article class="">
                 <p>{{ poll.categories.category }}</p>
-                <h3 class="soon-card__h3">{{ poll.title }}</h3>
+                <br><br>
+                <h3 class="">{{ poll.title }}</h3>
+                <p>{{ poll.description }}</p>
+                <br>
 
-                <!-- <p>{{ poll.description }}</p> -->
 
-                <p class="soon-card__countdown">Ends in {{ poll.daysLeft }} @if (poll.daysLeft == 1 || poll.daysLeft ==
+                <p class="">Ends in {{ poll.daysLeft }} @if (poll.daysLeft == 1 || poll.daysLeft ==
                     -1)
                     {day} @else {days}</p>
+                <br><br>
 
                 @for (pq of poll.poll_question; track pq.question.id) {
                 <h4>{{ pq.question.question }}</h4>
+                <br><br>
 
                 <!-- <ul> -->
                 @for (opt of pq.question.options; track opt.id) {
                 {{ opt.option }} (Votes: {{ opt.vote }})
-                <br>
+                <br><br>
                 }
                 <!-- </ul> -->
                 }
@@ -36,6 +40,10 @@
 
         <section>
             Results Section
+            <br><br>
+            bla, bla, bla
+
+
         </section>
 
     </div>
