@@ -18,10 +18,12 @@
     </article>
 
 
-    <div class="list__survey-section">
+    <div class="list__survey-section" [class.active]="selectedStatus() === 'active'">
 
         @for (poll of filteredPolls(); track poll.id) {
-        <article class="list__card">
+        <article class="list__card" 
+        [routerLink]="poll.daysLeft >= 0 ? ['view', poll.id] : null" 
+        [attr.role]="poll.daysLeft >= 0 ? 'link' : null">
             <p class="list__card__p">{{ poll.categories.category }}</p>
             <h3 class="list__card__h3">{{ poll.title }}</h3>
 

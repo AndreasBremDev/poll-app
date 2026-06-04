@@ -1,0 +1,42 @@
+<header class="wrapper">
+    <img src="./assets/img/logo_purple.png" alt="Poll App Logo">
+</header>
+<div class="wrapper">
+    <div class="view__box__servey-results">
+        <section>
+            Survey Section <br><br>
+            @if (currentPoll(); as poll) {
+
+            <!-- // <app-poll-item (inputPoll)="item()"> -->
+
+            <article class="soon-card">
+                <p>{{ poll.categories.category }}</p>
+                <h3 class="soon-card__h3">{{ poll.title }}</h3>
+
+                <!-- <p>{{ poll.description }}</p> -->
+
+                <p class="soon-card__countdown">Ends in {{ poll.daysLeft }} @if (poll.daysLeft == 1 || poll.daysLeft ==
+                    -1)
+                    {day} @else {days}</p>
+
+                @for (pq of poll.poll_question; track pq.question.id) {
+                <h4>{{ pq.question.question }}</h4>
+
+                <!-- <ul> -->
+                @for (opt of pq.question.options; track opt.id) {
+                {{ opt.option }} (Votes: {{ opt.vote }})
+                <br>
+                }
+                <!-- </ul> -->
+                }
+
+            </article>
+            }
+        </section>
+
+        <section>
+            Results Section
+        </section>
+
+    </div>
+</div>

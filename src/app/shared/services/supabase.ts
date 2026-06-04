@@ -13,8 +13,10 @@ export class Supabase {
   polls = signal<Poll[]>([]);
   categories = signal<Categories[]>([]);
 
-  ngOnInit(): void {
-
+  constructor() {
+    // Wir casten window zu 'any', damit TypeScript nicht meckert,
+    // dass es die Eigenschaft 'supa' nicht kennt.
+    (window as any).supa = this;
   }
 
   async getData(/* pollId: number */) {

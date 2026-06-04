@@ -1,11 +1,12 @@
 import { Component, inject, signal, computed } from '@angular/core';
 import { Supabase } from '../../../../shared/services/supabase';
 import { Poll, Categories, SurveyStatus } from '../../../../shared/interfaces/interface';
+import { RouterLink } from "@angular/router";
 
 
 @Component({
   selector: 'app-list-servey-section',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './list-servey-section.html',
   styleUrl: './list-servey-section.scss',
 })

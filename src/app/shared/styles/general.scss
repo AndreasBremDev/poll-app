@@ -14,17 +14,35 @@
     --font_white: #ffffff;
     --soon-card-light: #FAF5FE;
     --soon-card-hover: #F4E9FB;
+    --servey-view-card: #8E70991A;
 }
 
 body {
-    background-color: var(--primary_purple);
-    color: var(--font_white);
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+app-root {
     font-family: 'Mulish';
     padding-block: clamp(16px, 3.6vw, 48px);
     padding-inline: clamp(8px, 3vw, 48px);
+    display: block;
+    min-height: 100vh;
+    min-height: 100dvh;
+    width: 100%;
 }
 
-.wrapper{
+app-root.theme-start {
+    background-color: #35273A;
+    color: #ffffff;
+}
+
+app-root.theme-survey {
+    background-color: var(--font_white);
+    color: var(--primary_purple);
+}
+
+.wrapper {
     max-width: 1920px;
     margin-inline: auto;
 }
@@ -42,12 +60,13 @@ body {
     text-wrap: balance;
 }
 
-button, select {
+button,
+select {
     background: none;
-	color: inherit;
-	border: none;
-	padding: 0;
-	font: inherit;
-	outline: inherit;
-	cursor: pointer;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    outline: inherit;
+    cursor: pointer;
 }
