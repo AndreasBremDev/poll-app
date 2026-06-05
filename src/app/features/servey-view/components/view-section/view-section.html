@@ -1,0 +1,34 @@
+<p>view-section works!</p>
+<br><br>
+
+@if (currentPoll(); as poll) {
+
+            <!-- // <app-poll-item (inputPoll)="item()"> -->
+
+            <article class="">
+                <p>{{ poll.categories.category }}</p>
+                <br><br>
+                <h3 class="">{{ poll.title }}</h3>
+                <p>{{ poll.description }}</p>
+                <br>
+                <p class="">Ends in {{ poll.daysLeft }} @if (poll.daysLeft == 1 || poll.daysLeft ==
+                    -1)
+                    {day} @else {days}</p>
+                <br><br>
+
+                @for (pq of poll.poll_question; track pq.question.id) {
+                <h4>{{ pq.question.question }}</h4>
+                <br>
+
+                <!-- <ul> -->
+                @for (opt of pq.question.options; track opt.id) {
+                {{ opt.option }} (Votes: {{ opt.vote }})
+                <br>
+
+                }
+                <!-- </ul> -->
+                <br><br>
+                }
+
+            </article>
+            }

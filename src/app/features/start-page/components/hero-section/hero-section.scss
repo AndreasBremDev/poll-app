@@ -1,6 +1,9 @@
 @use '../../../../shared/styles/mixin.scss' as mx;
 
 .hero__section {
+    &__logo {
+        margin-bottom: mx.calculate-clamp(54px, 92px);
+    }
     &__parent {
         @include mx.flex-direction-align-justify-gap(row, center, center, 32px);
     }
@@ -11,7 +14,6 @@
 
     &__h1 {
         font-size: mx.calculate-clamp(48px, 100px);
-        margin-top: mx.calculate-clamp(54px, 92px);
         ;
     }
 
