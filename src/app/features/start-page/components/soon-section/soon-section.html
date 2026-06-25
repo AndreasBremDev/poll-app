@@ -8,15 +8,13 @@
 
 		@for (poll of daysFilteredPolls(); track poll.id) {
 
-		<!-- // <app-poll-item (inputPoll)="item()"> -->
+		
 
 		<!-- @if (poll.daysLeft >= 0) { -->
 
 		<article class="soon-card" [routerLink]="['view', poll.id]" role="link">
 			<p>{{ poll.categories.category }}</p>
 			<h3 class="soon-card__h3">{{ poll.title }}</h3>
-
-			<!-- <p>{{ poll.description }}</p> -->
 
 			<p class="soon-card__countdown">Ends in {{ poll.daysLeft }} @if (poll.daysLeft == 1 || poll.daysLeft == -1)
 				{day} @else {days}</p>
@@ -32,7 +30,6 @@
 			} -->
 
 		</article>
-		<!-- } -->
 		} @empty {
 		<article class="soon-card" [routerLink]="['create']" role="link">
 			<p>survey category</p>

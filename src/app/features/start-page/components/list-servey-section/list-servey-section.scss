@@ -148,19 +148,3 @@ select option {
   background-color: var(--soon-card-light);
   cursor: pointer;
 }
-
-// select::picker-icon {
-//   color: var(--primary_orange);
-//   transition: 0.4s rotate;
-// }
-
-// select:open::picker-icon {
-//   rotate: 180deg;
-// }
-
-
-// ::picker(select) {
-//   border: none;
-//   border-radius: 8px;
-//   color: var(--primary_purple);
-// }

@@ -1,5 +1,10 @@
 @use '../../shared/styles/mixin.scss' as mx;
 
+app-view-section,
+app-result-section {
+    width: 100%;
+}
+
 .view {
     &__box {
         &__servey-results {
@@ -7,7 +12,7 @@
             border: 1px solid green;
 
             @media (max-width: 768px) {
-                @include mx.flex-direction-align-justify-gap(column, center, center, 56px);
+                @include mx.flex-direction-align-justify-gap(column, flex-start, flex-start, 56px);
             }
         }
     }

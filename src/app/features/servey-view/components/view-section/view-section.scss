@@ -1,0 +1,20 @@
+@use '../../../../shared/styles/mixin.scss' as mx;
+
+.view-section {
+    &__box {
+        &__parent{
+            @include mx.flex-direction-align-justify-gap(column, flex-start, center, 8px);
+            background-color: var(--servey-view-card);
+            border-radius: 0 160px 0 0;
+            padding: 40px;
+        }
+        &__child__category{
+            width: 100%;
+            @include mx.flex-direction-align-justify-gap(row, center, space-between);
+        }
+    }
+
+    &__title {
+        font-size: 56px;
+    }
+}
