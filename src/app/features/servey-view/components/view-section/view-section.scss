@@ -3,11 +3,17 @@
 .view-section {
     &__box {
         &__parent{
-            @include mx.flex-direction-align-justify-gap(column, flex-start, center, 8px);
+            @include mx.flex-direction-align-justify-gap(column, flex-start, center);
             background-color: var(--servey-view-card);
             border-radius: 0 160px 0 0;
-            padding: 40px;
+            padding: mx.px-to-rem(40);
         }
+
+        &__child__title-section{
+            @include mx.flex-direction-align-justify-gap(column, flex-start, center, 8px);
+
+        }
+
         &__child__category{
             width: 100%;
             @include mx.flex-direction-align-justify-gap(row, center, space-between);
@@ -15,6 +21,25 @@
     }
 
     &__title {
-        font-size: 56px;
+        font-size: mx.px-to-rem(56);
+        @media (max-width: 768px) {
+            font-size: mx.px-to-rem(48);
+        }
+    }
+
+    &__question{
+        font-weight: 700;
+        font-size: mx.px-to-rem(20);
+        margin-top: mx.px-to-rem(40);
+    }
+
+    &__multiple-false{
+        margin-bottom: mx.px-to-rem(24);
+    }
+
+    &__multiple-answer{
+        font-size: mx.px-to-rem(16);
+        font-weight: 400;
+        margin-bottom: mx.px-to-rem(24);
     }
 }

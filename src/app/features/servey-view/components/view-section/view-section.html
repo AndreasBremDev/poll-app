@@ -3,23 +3,25 @@
 <!-- // <app-poll-item (inputPoll)="item()"> -->
 
 <article class="view-section__box__parent">
-    <p>published</p>
-    <div class="view-section__box__child__category">
-        <p class="">Ends in {{ poll.daysLeft }} @if (poll.daysLeft == 1 || poll.daysLeft ==
-            -1)
-            {day} @else {days}</p>
-        <p>{{ poll.categories.category }}</p>
+    <div class="view-section__box__child__title-section">
+        <p>published</p>
+        <div class="view-section__box__child__category">
+            <p class="">Ends in {{ poll.daysLeft }} @if (poll.daysLeft == 1 || poll.daysLeft ==
+                -1)
+                {day} @else {days}</p>
+            <p>Category: {{ poll.categories.category }}</p>
+        </div>
+        <h3 class="view-section__title nerko orange">{{ poll.title }}</h3>
+        <p class="view-section__description">{{ poll.description }}</p>
     </div>
-    <h3 class="view-section__title nerko orange">{{ poll.title }}</h3>
-    <p>{{ poll.description }}</p>
 
-    @for (pq of poll.poll_question; track pq.question.id) {
-    <h4>{{ pq.question.question }}</h4>
+    @for (pq of poll.poll_question; track pq.question.id; let index = $index) {
+    <h4 class="view-section__question" [class.view-section__multiple-false]="!pq.question.multiple">{{index+1}}.&nbsp;{{ pq.question.question }}</h4>
     @if(pq.question.multiple === true) {
-    <h5>More than one answers are possible.</h5>
+    <h5 class="view-section__multiple-answer">More than one answers are possible.</h5>
     }
 
-    @for (opt of pq.question.options; track opt.id) {
+    @for (opt of pq.question.options; track opt.id; let count = $count) {
     {{ opt.option }} (Votes: {{ opt.vote }})
     <br>
     }

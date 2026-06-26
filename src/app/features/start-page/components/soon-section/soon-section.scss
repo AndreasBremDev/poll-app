@@ -30,7 +30,7 @@
 
     &__h3 {
         @include mx.flex-direction-align-justify-gap(row, center, flex-start);
-        font-size: 26px; // px to rem - pending
+        font-size: mx.px-to-rem(26);
         font-weight: 700;
     }
 
@@ -46,7 +46,7 @@
     }
 
     &__countdown {
-        font-size: 16px; // px to rem - pending
+        font-size: mx.px-to-rem(16);
         background-color: var(--secondary_orange);
         color: var(--primary_purple);
         padding: 3px 6px;

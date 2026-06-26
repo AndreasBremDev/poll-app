@@ -33,7 +33,7 @@
   }
 
   &__selectors {
-    margin-block: 40px;
+    margin-block: mx.px-to-rem(40);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -100,14 +100,14 @@
 
     &__h3 {
       @include mx.flex-direction-align-justify-gap(row, center, flex-start);
-      font-size: 24px; // px to rem - pending
+      font-size: mx.px-to-rem(24);
       font-weight: 700;
       margin: 8px 0 24px 0;
     }
 
     &__countdown {
       justify-self: end;
-      font-size: 16px; // px to rem - pending
+      font-size: mx.px-to-rem(16);
       background-color: var(--secondary_orange);
       color: var(--primary_purple);
       padding: 3px 6px;
@@ -129,7 +129,7 @@ select {
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
-  margin-bottom: 4px;
+  margin-bottom: mx.px-to-rem(4);
   width: 100%;
 }
 
