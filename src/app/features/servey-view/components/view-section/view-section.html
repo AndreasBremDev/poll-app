@@ -21,8 +21,8 @@
     <h5 class="view-section__multiple-answer">More than one answers are possible.</h5>
     }
 
-    @for (opt of pq.question.options; track opt.id; let count = $count) {
-    {{ opt.option }} (Votes: {{ opt.vote }})
+    @for (opt of pq.question.options; track opt.id; let i = $index) {
+    {{i | indexToLetter }}. {{ opt.option }} (Votes: {{ opt.vote }})
     <br>
     }
     }
