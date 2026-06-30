@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { StartPage } from './features/start-page/start-page';
-import { ServeyView } from './features/servey-view/servey-view';
-import { ServeyCreate } from './features/servey-create/servey-create';
+import { SurveyView } from './features/survey-view/survey-view';
+import { SurveyCreate } from './features/survey-create/survey-create';
 
 export const routes: Routes = [
     {
@@ -10,15 +10,15 @@ export const routes: Routes = [
     },
     {
         path:'view',
-        component: ServeyView
+        component: SurveyView
     },
     {
         path:'view/:id',
-        component: ServeyView
+        component: SurveyView
     },
     {
         path:'create',
-        component: ServeyCreate
+        component: SurveyCreate
     },
     {
         path:'**',

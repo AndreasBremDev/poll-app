@@ -1,0 +1,92 @@
+@use '../../../../shared/styles/mixin.scss' as mx;
+
+.view-section {
+    &__box {
+        &__parent {
+            @include mx.flex-direction-align-justify-gap(column, flex-start, center);
+            background-color: var(--servey-view-card);
+            border-radius: 0 160px 0 0;
+            padding: mx.px-to-rem(40);
+        }
+
+        &__child {
+            &__title-section {
+                @include mx.flex-direction-align-justify-gap(column, flex-start, center, 8px);
+            }
+
+            &__question-section {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(min(414px, 100%), 1fr));
+                width: 100%;
+            }
+
+            &__vote-button {
+                background-color: var(--primary_orange);
+                color: var(--primary_purple);
+                padding: 8px 12px;
+                outline: none;
+                border: none;
+                margin-top: mx.px-to-rem(24);
+                align-self: self-end;
+                border-radius: 10px;
+                cursor: pointer;
+
+                &[disabled]{
+                    background-color: var(--primary_orange-disabled);
+                    cursor: default;
+                }
+            }
+        }
+    }
+
+    &__days-and-category {
+        width: 100%;
+        @include mx.flex-direction-align-justify-gap(row, center, space-between);
+    }
+
+    &__published {
+        background-color: var(--primary_orange);
+        color: var(--primary_purple);
+        padding: 3px 12px;
+        border-radius: 0 14px 0 0;
+        outline: none;
+        border: none;
+    }
+
+    &__title {
+        font-size: mx.px-to-rem(56);
+        line-height: mx.px-to-rem(50);
+
+        @media (max-width: 768px) {
+            font-size: mx.px-to-rem(48);
+        }
+    }
+
+    &__question {
+        font-weight: 700;
+        font-size: mx.px-to-rem(20);
+        margin-top: mx.px-to-rem(40);
+    }
+
+    &__multiple-false {
+        margin-bottom: mx.px-to-rem(24);
+    }
+
+    &__multiple-answer {
+        font-size: mx.px-to-rem(16);
+        font-weight: 400;
+        margin-bottom: mx.px-to-rem(24);
+    }
+
+    &__option-letter-bold {
+        font-weight: 700;
+        padding-left: mx.px-to-rem(16)
+    }
+}
+
+input[radio] {
+    appearance: none;
+}
+input[radio]::after{
+    
+}

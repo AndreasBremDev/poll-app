@@ -19,7 +19,7 @@ app-result-section {
             @include mx.flex-direction-align-justify-gap(row, flex-start, flex-start, 42px);
             width: 100%;
 
-            @media (max-width: 768px) {
+            @media (max-width: 1600px) {
                 @include mx.flex-direction-align-justify-gap(column, flex-start, flex-start, 56px);
             }
         }

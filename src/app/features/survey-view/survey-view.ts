@@ -6,12 +6,12 @@ import { ViewSection } from './components/view-section/view-section';
 import { ResultSection } from './components/result-section/result-section';
 
 @Component({
-  selector: 'app-servey-view',
+  selector: 'app-survey-view',
   imports: [ViewSection,ResultSection],
-  templateUrl: './servey-view.html',
-  styleUrl: './servey-view.scss',
+  templateUrl: './survey-view.html',
+  styleUrl: './survey-view.scss',
 })
-export class ServeyView {
+export class SurveyView {
 
 
 

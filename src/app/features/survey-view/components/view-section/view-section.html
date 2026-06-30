@@ -1,0 +1,48 @@
+@if (currentPoll(); as poll) {
+
+<!-- // <app-poll-item (inputPoll)="item()"> -->
+
+<article class="view-section__box__parent">
+    <section class="view-section__box__child__title-section">
+        <p class="view-section__published">published</p>
+        <div class="view-section__days-and-category">
+            <p class="">Ends in {{ poll.daysLeft }} @if (poll.daysLeft == 1 || poll.daysLeft ==
+                -1)
+                {day} @else {days}</p>
+            <p>Category: {{ poll.categories.category }}</p>
+        </div>
+        <h3 class="view-section__title nerko orange">{{ poll.title }}</h3>
+        <p class="view-section__description">{{ poll.description }}</p>
+    </section>
+
+    <section class="view-section__box__child__question-section">
+        @for (pq of poll.poll_question; track pq.question.id; let index = $index) {
+        <div>
+            <h4 class="view-section__question" [class.view-section__multiple-false]="!pq.question.multiple">
+                {{index+1}}.&nbsp;{{ pq.question.question }}</h4>
+            @if(pq.question.multiple === true) {
+            <h5 class="view-section__multiple-answer">More than one answers are possible.</h5>
+            }
+
+            @for (opt of pq.question.options; track opt.id; let i = $index) {
+            <div>
+
+                <label for="option">
+                    @if(!pq.question.multiple){
+                    <input type="radio" id="option"><span class="view-section__option-letter-bold">{{i | indexToLetter }}. </span>{{opt.option }}
+                    } @else {
+                    <input type="radio" name=opt.id id="option"><span class="view-section__option-letter-bold">{{i | indexToLetter }}. </span>{{opt.option }}
+                    }
+                </label>
+            </div>
+            }
+        </div>
+        }
+    </section>
+
+    <button class="view-section__box__child__vote-button" disabled>
+        Complete survey
+    </button>
+
+</article>
+}
