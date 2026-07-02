@@ -1,6 +1,6 @@
 @if (currentPoll(); as poll) {
 
-<!-- // <app-poll-item (inputPoll)="item()"> -->
+<!-- OPTION: <app-poll-item (inputPoll)="item()"> -->
 
 <article class="view-section__box__parent">
     <section class="view-section__box__child__title-section">
@@ -25,16 +25,24 @@
             }
 
             @for (opt of pq.question.options; track opt.id; let i = $index) {
-            <div>
+            <!-- <div class=""> -->
+            <label class="view-section__option__container">
 
-                <label for="option">
-                    @if(!pq.question.multiple){
-                    <input type="radio" id="option"><span class="view-section__option-letter-bold">{{i | indexToLetter }}. </span>{{opt.option }}
-                    } @else {
-                    <input type="radio" name=opt.id id="option"><span class="view-section__option-letter-bold">{{i | indexToLetter }}. </span>{{opt.option }}
-                    }
-                </label>
-            </div>
+                @if(pq.question.multiple){
+                <input type="checkbox" [name]="'option-' + opt.id" [value]="opt.id">
+
+                } @else {
+                <input type="radio" [name]="'question-' + pq.question.id" [value]="opt.id">
+                <!-- <span class="view-section__option-letter-bold">{{i | indexToLetter }}. </span>{{opt.option }} -->
+                }
+                <div class="view-section__option__row">
+                    <span class="view-section__option__letter-bold">
+                        {{i | indexToLetter }}. </span>
+                    <span class="view-section__option__text">{{opt.option }}</span>
+                </div>
+            
+            </label>
+            <!-- </div> -->
             }
         </div>
         }
