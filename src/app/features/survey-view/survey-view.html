@@ -3,7 +3,12 @@
 </header>
 <div class="wrapper">
     <div class="view__box__servey-results">
-        <app-view-section></app-view-section>
-        <app-result-section></app-result-section>
+        <app-view-section [currentPollView]="currentPoll()"></app-view-section>
+        <app-result-section [currentPollResult]="currentPoll()"></app-result-section>
     </div>
 </div>
+
+<!-- 
+<br><br>
+<h4>Debug JSON</h4>
+<pre>{{ supabase.polls() | json }}</pre> -->

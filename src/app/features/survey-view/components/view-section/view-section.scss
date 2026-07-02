@@ -93,6 +93,7 @@
             align-items: flex-start;
             position: relative;
             padding-left: 8px;
+            padding-block: 3px;
             margin-bottom: 8px;
             cursor: pointer;
             font-size: mx.px-to-rem(16);
@@ -100,6 +101,13 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
+
+            @media (pointer:fine) and (hover: hover) {
+                &:hover {
+                    background-color: var(--secondary_orange-hover);
+                    border-radius: 3px;
+                }
+            }
         }
 
         &__container input {
@@ -115,13 +123,11 @@
             min-width: 21px;
             width: 21px;
             height: 21px;
-            align-items: center;
-            justify-content: center;
             cursor: pointer;
             background: center / contain no-repeat url("./../../../../assets/img/view-survey_option_unchecked.svg");
         }
 
-        &__container:has(input:checked)::before{
+        &__container:has(input:checked)::before {
             background: center / contain no-repeat url("./../../../../assets/img/view-survey_option_checked.svg");
         }
 

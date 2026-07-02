@@ -21,7 +21,6 @@ export class App {
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {
       this.currentPath = event.urlAfterRedirects;
-      console.log(this.currentPath); // DEBUGGING
     });
   }
 

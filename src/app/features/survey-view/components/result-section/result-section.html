@@ -1,4 +1,33 @@
-Survey results LIVE
+@if (currentPollResult(); as poll) {
+<h4 class="nerko" style="font-size: 32px; color: #221227;">Survey results <span class="nerko orange">LIVE</span></h4>
+<br><br>
+
+<section class="" style="display:flex;flex-direction: column;">
+    @for (pq of poll.poll_question; track pq.question.id; let index = $index) {
+    <div style="margin-bottom: 24px;">
+        <h4 class="" style="font-weight: 700; font-size: 18px;margin-bottom: 16px;">
+            {{index+1}}.&nbsp;{{ pq.question.question }}</h4>
+
+        @for (opt of pq.question.options; track opt.id; let i = $index) {
+        <article style="display:flex;gap:4px; margin-bottom:12px;">
+            <span style="box-sizing: border-box; width: 12px">
+                {{i | indexToLetter }}</span>
+            <div style="background-color: lightgrey; height: 21px; width:255px; border-radius: 0 20px 20px 0; box-sizing: border-box;">
+                <div class="" style="background-color:green; height: 21px; border-radius: 0 20px 20px 0; text-align: center; color: white;" [style.width]="opt.vote + '%'"></div>
+            </div>
+            <p>{{ opt.vote }}</p>
+        </article>
+
+        }
+    </div>
+    }
+</section>
+
+}
+
+<br><br>
+"EMPTY"-Alternative
+
 <br><br><br>
 
 Results will be shown here after participants complete the survey.

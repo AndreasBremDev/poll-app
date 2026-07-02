@@ -1,4 +1,4 @@
-@if (currentPoll(); as poll) {
+@if (currentPollView(); as poll) {
 
 <!-- OPTION: <app-poll-item (inputPoll)="item()"> -->
 
@@ -25,7 +25,6 @@
             }
 
             @for (opt of pq.question.options; track opt.id; let i = $index) {
-            <!-- <div class=""> -->
             <label class="view-section__option__container">
 
                 @if(pq.question.multiple){
@@ -42,7 +41,6 @@
                 </div>
             
             </label>
-            <!-- </div> -->
             }
         </div>
         }
