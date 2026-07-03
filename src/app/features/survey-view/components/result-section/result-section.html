@@ -1,6 +1,7 @@
 @if (currentPollResult(); as poll) {
-<h4 class="nerko" style="font-size: 32px; color: #221227;">Survey results <span class="nerko orange">LIVE</span></h4>
-<br><br>
+
+<h3 class="nerko result-section__heading">Survey results <span class="nerko orange">LIVE</span></h3>
+@if (pollVoteTotal() !== 0) {
 
 <section class="" style="display:flex;flex-direction: column;">
     @for (pq of poll.poll_question; track pq.question.id; let index = $index) {
@@ -10,26 +11,23 @@
 
         @for (opt of pq.question.options; track opt.id; let i = $index) {
         <article style="display:flex;gap:4px; margin-bottom:12px;">
-            <span style="box-sizing: border-box; width: 12px">
+            <span style="box-sizing: border-box; width: 12px; font-weight: 700;">
                 {{i | indexToLetter }}</span>
-            <div style="background-color: lightgrey; height: 21px; width:255px; border-radius: 0 20px 20px 0; box-sizing: border-box;">
-                <div class="" style="background-color:green; height: 21px; border-radius: 0 20px 20px 0; text-align: center; color: white;" [style.width]="opt.vote + '%'"></div>
+            <div
+                style="background-color: lightgrey; height: 21px; width:255px/* clamp-mixin!!! */; border-radius: 0 20px 20px 0; box-sizing: border-box; margin-left: 6px;">
+                <div class=""
+                    style="background-color:var(--primary_orange); height: 21px; border-radius: 0 20px 20px 0; text-align: center; color: white;"
+                    [style.width]="(opt.vote | votePercentage : pq.question.options) +'%'"></div>
             </div>
-            <p>{{ opt.vote }}</p>
+            <p style="width:50px;text-align: end;">{{ (opt.vote | votePercentage : pq.question.options) +'%' }}</p>
         </article>
 
         }
     </div>
     }
 </section>
-
+} @else {
+<p style="font-weight: 700;">Results will be shown here after participants complete the survey.</p>
+<p style="font-weight: 700;margin-top: 146px">There are no answers yet.</p>
 }
-
-<br><br>
-"EMPTY"-Alternative
-
-<br><br><br>
-
-Results will be shown here after participants complete the survey.
-<br><br>
-There are no answers yet.
+}

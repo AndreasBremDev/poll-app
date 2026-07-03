@@ -1,0 +1,10 @@
+@use '../../../../shared/styles/mixin.scss' as mx;
+
+.result-section{
+    &__heading{
+        font-size: 32px; 
+        color: #221227;
+        margin-bottom: mx.px-to-rem(24);
+    }
+
+}
