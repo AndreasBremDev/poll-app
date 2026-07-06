@@ -16,27 +16,29 @@
     </section>
 
     <section class="view-section__box__child__question-section">
-        @for (pq of poll.poll_question; track pq.question.id; let index = $index) {
+        @for (pq of poll.poll_question; track pq.question.id; let questionIndex = $index) {
         <div>
             <h4 class="view-section__question" [class.view-section__multiple-false]="!pq.question.multiple">
-                {{index+1}}.&nbsp;{{ pq.question.question }}</h4>
+                {{questionIndex+1}}.&nbsp;{{ pq.question.question }}</h4>
             @if(pq.question.multiple === true) {
             <h5 class="view-section__multiple-answer">More than one answers are possible.</h5>
             }
 
-            @for (opt of pq.question.options; track opt.id; let i = $index) {
+            @for (opt of pq.question.options; track opt.id; let optionIndex = $index) {
             <label class="view-section__option__container">
 
                 @if(pq.question.multiple){
-                <input type="checkbox" [name]="'option-' + opt.id" [value]="opt.id">
+                <input type="checkbox" [name]="'option-' + opt.id" [value]="opt.id" 
+                (change)="updateSignal($event, opt.id, pq.question.id)">
 
                 } @else {
-                <input type="radio" [name]="'question-' + pq.question.id" [value]="opt.id">
+                <input type="radio" [name]="'question-' + pq.question.id" [value]="opt.id" 
+                (change)="updateSignal($event, opt.id, pq.question.id)">
                 <!-- <span class="view-section__option-letter-bold">{{i | indexToLetter }}. </span>{{opt.option }} -->
                 }
                 <div class="view-section__option__row">
                     <span class="view-section__option__letter-bold">
-                        {{i | indexToLetter }}. </span>
+                        {{optionIndex | indexToLetter }}.</span>
                     <span class="view-section__option__text">{{opt.option }}</span>
                 </div>
             

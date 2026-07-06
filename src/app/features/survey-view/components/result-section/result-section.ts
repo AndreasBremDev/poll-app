@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, model } from '@angular/core';
 import { Poll } from '../../../../shared/interfaces/interface';
 import { IndexToLetterPipe } from '../../../../shared/pipes/index-to-letter.pipe';
 import { VotePercentagePipe } from '../../../../shared/pipes/vote-percentage-pipe-pipe';
@@ -14,7 +14,7 @@ import { VotePercentagePipe } from '../../../../shared/pipes/vote-percentage-pip
 })
 export class ResultSection {
 
-  currentPollResult = input<Poll | undefined>()
+  currentPollResult = model<Poll | undefined>()
 
   pollVoteTotal = computed(() => {
     const poll = this.currentPollResult();

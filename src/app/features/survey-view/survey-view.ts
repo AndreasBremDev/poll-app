@@ -18,15 +18,18 @@ export class SurveyView {
   supabase = inject(Supabase);
   route = inject(ActivatedRoute);
 
-  currentPoll = signal<Poll | undefined>(undefined);
+  currentPoll = signal<Poll | undefined>(undefined); // note: model = signal, data out to child, in from child
+
+  currentId = 0;
 
   async ngOnInit(): Promise<void> {
     if (this.supabase.polls().length === 0) {
       await this.supabase.getData();
     }
-    let currentId = Number(this.route.snapshot.paramMap.get('id'));
-    let foundPoll = this.supabase.polls().find(poll => poll.id === currentId);
+    this.currentId = Number(this.route.snapshot.paramMap.get('id'));
+    let foundPoll = this.supabase.polls().find(poll => poll.id === this.currentId);
     this.currentPoll.set(foundPoll);    
   }
+      
 
 }
