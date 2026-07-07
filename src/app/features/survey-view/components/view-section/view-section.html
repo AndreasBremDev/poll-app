@@ -48,7 +48,7 @@
         }
     </section>
 
-    <button class="view-section__box__child__vote-button" disabled>
+    <button class="view-section__box__child__vote-button" [disabled]="!isPollValid()" (click)="uploadPollVotes()">
         Complete survey
     </button>
 
