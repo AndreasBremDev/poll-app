@@ -49,7 +49,7 @@
     </section>
 
     <button class="view-section__box__child__vote-button" [disabled]="!isPollValid()" (click)="uploadPollVotes()">
-        Complete survey
+        @if (!isVotedAlready){Complete survey} @else {I completed the survey already}
     </button>
 
 </article>

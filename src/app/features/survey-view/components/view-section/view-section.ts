@@ -1,4 +1,4 @@
-import { Component, inject, signal, model, computed } from '@angular/core';
+import { Component, inject, signal, model, computed, booleanAttribute } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Supabase } from '../../../../shared/services/supabase';
 import { Poll } from '../../../../shared/interfaces/interface';
@@ -15,6 +15,11 @@ import { IndexToLetterPipe } from '../../../../shared/pipes/index-to-letter.pipe
 export class ViewSection {
   supabase = inject(Supabase);
   private router = inject(Router);
+  isVotedAlready = false;
+
+  ngOnInit() {
+    this.loadFromLocalStorage();
+  }
 
   currentPollView = model<Poll | undefined>();
   selectedOptions = signal<Record<number, number[]>>({});
@@ -82,7 +87,7 @@ export class ViewSection {
     return poll.poll_question.every(pq => {
       const questionId = pq.question.id;
       return memory[questionId] !== undefined && memory[questionId].length > 0
-    })
+    }) && !this.isVotedAlready
   });
 
   async uploadPollVotes() {
@@ -91,11 +96,13 @@ export class ViewSection {
       if (!poll) return;
       const optionsToUpload: { id: number; vote: number }[] = [];
       this.createOptIdAndOptVoteArray(poll, optionsToUpload);
-      await this.sendOptionsToUploadViaSupabase(optionsToUpload);
+      await this.sendOptionsToDatabaseSupabase(optionsToUpload);
+      this.isVotedAlready = true;
+      this.saveToLocalStorage();
     }
   }
 
-  private async sendOptionsToUploadViaSupabase(optionsToUpload: { id: number; vote: number; }[]) {
+  private async sendOptionsToDatabaseSupabase(optionsToUpload: { id: number; vote: number; }[]) {
     try {
       await this.supabase.putData(optionsToUpload);
       this.router.navigate(['']);
@@ -107,7 +114,6 @@ export class ViewSection {
   private createOptIdAndOptVoteArray(poll: Poll, optionsToUpload: { id: number; vote: number; }[]) {
     for (const pq of poll.poll_question) {
       for (const opt of pq.question.options) {
-        console.log(opt);
         optionsToUpload.push({
           id: opt.id,
           vote: opt.vote
@@ -116,7 +122,20 @@ export class ViewSection {
     }
   }
 
+  saveToLocalStorage() {
+    const currentPollId = this.currentPollView()?.id;
+    if (!currentPollId) return;
+    const localData =
+      localStorage.setItem('isVotedAlready', JSON.stringify(this.isVotedAlready))
+
+  }
+
+  loadFromLocalStorage(): boolean {
+    let isVotedAlreadyLoad: boolean = JSON.parse(localStorage.getItem('isVotedAlready') ?? 'false')
+    this.isVotedAlready = isVotedAlreadyLoad;
+    return this.isVotedAlready;
+  }
 
 
-  
+
 }

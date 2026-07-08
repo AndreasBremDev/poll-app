@@ -1,10 +1,68 @@
 @use '../../../../shared/styles/mixin.scss' as mx;
 
-.result-section{
-    &__heading{
-        font-size: 32px; 
+.result-section {
+    &__heading {
+        font-size: 32px;
         color: #221227;
         margin-bottom: mx.px-to-rem(24);
+    }
+
+    &__box-main {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__box-option {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 12px;
+    }
+
+    &__box-question {
+        margin-bottom: mx.px-to-rem(24);
+    }
+
+    &__question-text {
+        font-weight: 700;
+        font-size: 18px;
+        margin-bottom: 16px;
+    }
+
+    &__index-letter {
+        box-sizing: border-box;
+        width: 12px;
+        font-weight: 700;
+    }
+
+    &__progress-bar {
+        background-color: lightgrey;
+        height: 21px;
+        width: mx.calculate-clamp(155px, 355px);
+        border-radius: 0 20px 20px 0;
+        box-sizing: border-box;
+        margin-left: 6px;
+
+        &--slider {
+            background-color: var(--primary_orange);
+            height: 21px;
+            border-radius: 0 20px 20px 0;
+            text-align: center;
+            color: white;
+        }
+    }
+
+    &__option-text {
+        box-sizing: border-box;
+        width: 50px;
+        text-align: end;
+    }
+
+    &__no-result-text {
+        font-weight: 700;
+
+        &.mt-146 {
+            margin-top: 146px
+        }
     }
 
 }

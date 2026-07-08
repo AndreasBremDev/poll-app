@@ -3,23 +3,21 @@
 <h3 class="nerko result-section__heading">Survey results <span class="nerko orange">LIVE</span></h3>
 @if (pollVoteTotal() !== 0) {
 
-<section class="" style="display:flex;flex-direction: column;">
+<section class="result-section__box-main">
     @for (pq of poll.poll_question; track pq.question.id; let index = $index) {
-    <div style="margin-bottom: 24px;">
-        <h4 class="" style="font-weight: 700; font-size: 18px;margin-bottom: 16px;">
+    <div class="result-section__box-question">
+        <h4 class="result-section__question-text">
             {{index+1}}.&nbsp;{{ pq.question.question }}</h4>
 
         @for (opt of pq.question.options; track opt.id; let i = $index) {
-        <article style="display:flex;gap:4px; margin-bottom:12px;">
-            <span style="box-sizing: border-box; width: 12px; font-weight: 700;">
+        <article class="result-section__box-option">
+            <span class="result-section__index-letter">
                 {{i | indexToLetter }}</span>
-            <div
-                style="background-color: lightgrey; height: 21px; width:255px/* clamp-mixin!!! */; border-radius: 0 20px 20px 0; box-sizing: border-box; margin-left: 6px;">
-                <div class=""
-                    style="background-color:var(--primary_orange); height: 21px; border-radius: 0 20px 20px 0; text-align: center; color: white;"
+            <div class="result-section__progress-bar">
+                <div class="result-section__progress-bar--slider"
                     [style.width]="(opt.vote | votePercentage : pq.question.options) +'%'"></div>
             </div>
-            <p style="width:50px;text-align: end;">{{ (opt.vote | votePercentage : pq.question.options) +'%' }}</p>
+            <p class="result-section__option-text">{{ (opt.vote | votePercentage : pq.question.options) +'%' }}</p>
         </article>
 
         }
@@ -27,7 +25,7 @@
     }
 </section>
 } @else {
-<p style="font-weight: 700;">Results will be shown here after participants complete the survey.</p>
-<p style="font-weight: 700;margin-top: 146px">There are no answers yet.</p>
+<p class="result-section__no-result-text">Results will be shown here after participants complete the survey.</p>
+<p class="result-section__no-result-text mt-146">There are no answers yet.</p>
 }
 }
