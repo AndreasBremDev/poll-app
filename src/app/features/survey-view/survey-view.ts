@@ -4,8 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Poll } from '../../shared/interfaces/interface';
 import { ViewSection } from './components/view-section/view-section';
 import { ResultSection } from './components/result-section/result-section';
-import { IndexToLetterPipe } from '../../shared/pipes/index-to-letter.pipe';
-import { JsonPipe } from '@angular/common';
+import { ModalDialog } from '../../shared/services/modal-dialog';
 
 @Component({
   selector: 'app-survey-view',
@@ -17,6 +16,7 @@ export class SurveyView {
 
   supabase = inject(Supabase);
   route = inject(ActivatedRoute);
+  modalDialog = inject(ModalDialog)
 
   currentPoll = signal<Poll | undefined>(undefined); // note: model = signal, data out to child, in from child
 

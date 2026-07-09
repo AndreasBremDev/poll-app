@@ -11,7 +11,7 @@
                 Collect opinions,
                 engage your
                 audience, and turn feedback into action.</p>
-            <button class="hero-btn-cta" [routerLink]="['create']">New servey</button>
+            <button class="hero-btn-cta" (click)="modalDialog.openCreateSurveyModal()"><!-- button: [routerLink]="['create']" -->New servey</button>
         </div>
         <div class="hero__section__image"></div>
     </section>

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ModalDialog } from '../../shared/services/modal-dialog';
 
 @Component({
   selector: 'app-survey-create',
@@ -6,4 +7,7 @@ import { Component } from '@angular/core';
   templateUrl: './survey-create.html',
   styleUrl: './survey-create.scss',
 })
-export class SurveyCreate {}
+export class SurveyCreate {
+
+  modalDialog = inject(ModalDialog)
+}
