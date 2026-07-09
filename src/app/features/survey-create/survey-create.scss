@@ -1,0 +1,121 @@
+@use '../../shared/styles/mixin.scss' as mx;
+
+.create {
+
+    &__box {
+
+        &__heading-and-close {
+            display: inline-flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        &__form-section {
+            gap: 64px;
+            padding: 40px 32px;
+            border-radius: 5px 80px 5px 5px;
+        }
+    }
+
+    &__batch {
+        padding: 3px 12px 3px 8px;
+        border-top-right-radius: 14px;
+        background-color: var(--secondary_orange);
+        color: var(--primary_purple);
+        width: fit-content;
+        box-sizing: border-box;
+    }
+
+    &__h1 {
+        display: inline-flex;
+        font-size: mx.px-to-rem(56);
+    }
+
+    &__cancel-btn,
+    &__add-question-btn {
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-style: Bold;
+        font-size: mx.px-to-rem(16);
+        display: flex;
+        gap: 10px;
+        height: fit-content;
+        align-items: center;
+        align-self: center;
+        background-color: var(--primary_orange-disabled);
+        transform: translateY(4px);
+    }
+
+    &__form {
+        &__label-input {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+    }
+}
+
+.list {
+    &__select-wrapper {
+        position: relative;
+        width: 250px;
+        box-sizing: border-box;
+
+        &::after {
+            content: "";
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 15px;
+            height: 8px;
+            pointer-events: none;
+            -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 15 8'><path d='M6.5843 7.61702L0.261628 1.44681C0.174419 1.3617 0.109012 1.2695 0.065407 1.17021C0.0218023 1.07092 0 0.964539 0 0.851064C0 0.624114 0.0799419 0.425532 0.239826 0.255319C0.399709 0.0851064 0.610465 0 0.872093 0H14.1279C14.3895 0 14.6003 0.0851064 14.7602 0.255319C14.9201 0.425532 15 0.624114 15 0.851064C15 0.907802 14.9128 1.10638 14.7384 1.44681L8.4157 7.61702C8.27035 7.75887 8.125 7.85816 7.97965 7.91489C7.8343 7.97163 7.67442 8 7.5 8C7.32558 8 7.1657 7.97163 7.02035 7.91489C6.875 7.85816 6.72965 7.75887 6.5843 7.61702Z'/></svg>") no-repeat center / contain;
+            mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 15 8'><path d='M6.5843 7.61702L0.261628 1.44681C0.174419 1.3617 0.109012 1.2695 0.065407 1.17021C0.0218023 1.07092 0 0.964539 0 0.851064C0 0.624114 0.0799419 0.425532 0.239826 0.255319C0.399709 0.0851064 0.610465 0 0.872093 0H14.1279C14.3895 0 14.6003 0.0851064 14.7602 0.255319C14.9201 0.425532 15 0.624114 15 0.851064C15 0.907802 14.9128 1.10638 14.7384 1.44681L8.4157 7.61702C8.27035 7.75887 8.125 7.85816 7.97965 7.91489C7.8343 7.97163 7.67442 8 7.5 8C7.32558 8 7.1657 7.97163 7.02035 7.91489C6.875 7.85816 6.72965 7.75887 6.5843 7.61702Z'/></svg>") no-repeat center / contain;
+            background-color: #fff;
+            transition: transform 125ms ease-in-out, background-color 125ms ease-in-out;
+        }
+
+        &:has(select:hover)::after,
+        &:has(select:active)::after,
+        &:has(select:focus-visible)::after {
+            background-color: var(--primary_orange);
+        }
+
+        &:has(select:focus-within)::after {
+            transform: translateY(-50%) rotate(180deg);
+        }
+    }
+}
+
+select {
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    -moz-padding: 4px 30px 4px 0;
+    padding: 4px 30px 4px 0;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    // margin-bottom: mx.px-to-rem(4); // needed?
+    width: 100%;
+}
+
+select:hover,
+select:active,
+select:focus-visible {
+    background-color: var(--secondary_purple);
+}
+
+select:focus::-ms-value {
+    background-color: var(--font_white);
+}
+
+select option {
+    color: var(--primary_purple);
+    background-color: var(--soon-card-light);
+    cursor: pointer;
+}
