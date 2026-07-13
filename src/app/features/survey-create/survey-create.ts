@@ -19,14 +19,22 @@ export class SurveyCreate {
 
   supabase = inject(Supabase)
 
+  minDate = new Date().toISOString().split('T')[0];
+  maxDate = '2099-12-31'
+  placeholderDate: string = '2099-12-31'
+
   userform = this.formbuilder.group({
     title: ['', [
       Validators.required,
       Validators.minLength(3),
-      Validators.maxLength(100)
+      Validators.maxLength(80)
     ]],
-    enddate: ['', []],
-    description: ['']
+    enddate: ['2099-12-31', []],
+    description: ['', [
+      Validators.maxLength(200)
+    ]],
+    question: ['', []],
+    option: ['',[]]
   })
 
   onChangeCategory(event: Event): void {

@@ -15,6 +15,10 @@ dialog[open] {
     padding: 24px; // adjust here
     z-index: 10;
 
+    @media (max-width: 593px){
+        width: 100%;
+    }
+
     &::backdrop {
         background: rgba(0, 0, 0, 0.2);
         backdrop-filter: blur(4px);
