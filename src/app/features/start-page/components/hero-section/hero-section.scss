@@ -4,6 +4,7 @@
     &__logo {
         margin-bottom: mx.calculate-clamp(54px, 92px);
     }
+
     &__parent {
         @include mx.flex-direction-align-justify-gap(row, center, center, 32px);
     }
@@ -61,8 +62,33 @@
     outline: none;
     border: none;
     margin-top: mx.px-to-rem(48);
+    font-size: mx.px-to-rem(18);
+    font-weight: 700;
+    font-style: bold;
 
-    &:hover {
-        background-color: var(--primary_orange);
+    .hero-btn-cta__icon {
+        width: 20px;
+        height: 20px;
+        margin-left: 10px;
+        transform: translateY(2px);
+    }
+
+    @media (pointer: fine) and (hover:hover) {
+        .hero-btn-cta__icon {
+            width: 0;
+            transform: translateY(2px);
+            margin-left: 0px;
+            overflow: hidden;
+            transition: all 0.3s ease-out;
+        }
+
+        &:hover {
+            background-color: var(--primary_orange);
+
+            .hero-btn-cta__icon {
+                width: 20px;
+                margin-left: 10px;
+            }
+        }
     }
 }

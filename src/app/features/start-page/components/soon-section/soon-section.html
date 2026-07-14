@@ -8,8 +8,6 @@
 
 		@for (poll of daysFilteredPolls(); track poll.id) {
 
-		
-
 		<!-- @if (poll.daysLeft >= 0) { -->
 
 		<article class="soon-card" [routerLink]="['view', poll.id]" role="link">
@@ -19,16 +17,6 @@
 			<p class="soon-card__countdown">Ends in {{ poll.daysLeft }} @if (poll.daysLeft == 1 || poll.daysLeft == -1)
 				{day} @else {days}</p>
 
-			<!-- @for (pq of poll.poll_question; track pq.question.id) {
-			<h4>{{ pq.question.question }}</h4>
-
-			<ul>
-				@for (opt of pq.question.options; track opt.id) {
-					<li>{{ opt.option }} (Votes: {{ opt.vote }})</li>
-				}
-			</ul>
-			} -->
-
 		</article>
 		} @empty {
 		<article class="soon-card" [routerLink]="['create']" role="link">
@@ -37,5 +25,8 @@
 			<p class="soon-card__countdown">new servey</p>
 		</article>
 		}
+
+		<!-- } -->
+	
 	</div>
 </section>

@@ -36,8 +36,10 @@ export class App {
       const dialog = this.dialogRef.nativeElement;
       if (isOpen) {
         dialog.showModal();
+        document.body.classList.add('modal-open');
       } else {
         dialog.close();
+        document.body.classList.remove('modal-open');
       }
     });
 

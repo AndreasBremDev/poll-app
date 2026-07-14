@@ -10,10 +10,14 @@ dialog[open] {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     max-width: 1920px;
     width: 90%;
-    max-height: 85vh; // adjust here
-    overflow-y: auto;
-    padding: 24px; // adjust here
+    max-height: 95dvh;
+    height: 90dvh;
+    padding: 40px 60px;
     z-index: 10;
+
+    @media (max-width: 768px){
+        padding: 20px 12px;
+    }
 
     @media (max-width: 593px){
         width: 100%;

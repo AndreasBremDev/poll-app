@@ -11,6 +11,7 @@
     --primary_orange-disabled: #FFB7704D;
     --primary_orange-disabled-hover: #FFB77099;
     --primary_purple: #35273A;
+    --primary_purple-disabled: #35273A66;
     --secondary_orange: #FFCFA1;
     --secondary_orange-hover: #FFCFA166;
     --secondary_purple: #D9D9D914;
@@ -26,6 +27,10 @@
 body {
     min-height: 100vh;
     min-height: 100dvh;
+}
+
+body.modal-open {
+    overflow: hidden;
 }
 
 app-root {
