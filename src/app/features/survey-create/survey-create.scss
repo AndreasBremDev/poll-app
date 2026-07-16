@@ -74,7 +74,14 @@
         background-color: var(--primary_orange-disabled);
         transform: translateY(4px);
 
-        &:hover {
+        @media (pointer: fine) and (hover:hover) {
+            &:hover {
+                background-color: var(--primary_orange-disabled-hover);
+            }
+        }
+        
+        &:focus-visible,
+        &:active{
             background-color: var(--primary_orange-disabled-hover);
         }
     }
@@ -333,7 +340,7 @@
             font-family: inherit;
             font-size: inherit;
 
-            &::-webkit-calendar-picker-indicator {
+            &::-webkit-calendar-picker-indicator { /* Chrome/Chromium/Edge/Opera */
                 cursor: pointer;
             }
         }

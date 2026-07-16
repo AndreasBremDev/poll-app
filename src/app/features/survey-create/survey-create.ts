@@ -1,7 +1,9 @@
 import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { ModalDialog } from '../../shared/services/modal-dialog';
-import { FormBuilder, ReactiveFormsModule, Validators, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Supabase } from '../../shared/services/supabase';
+import { maxYearValidator } from './../../shared/validators/custom-validators';
+import { limitYearLengthToFourDigits } from './../../shared/validators/custom-validators';
 
 @Component({
   selector: 'app-survey-create',
@@ -19,9 +21,9 @@ export class SurveyCreate {
 
   supabase = inject(Supabase)
 
+  thisYearPlusTwo = new Date().getFullYear() + 2;
   minDate = new Date().toISOString().split('T')[0];
-  maxDate = '2099-12-31'
-  placeholderDate: string = '2099-12-31'
+  maxDate = `${this.thisYearPlusTwo}-12-31`
 
   userform = this.formbuilder.group({
     title: ['', [
@@ -29,13 +31,55 @@ export class SurveyCreate {
       Validators.minLength(3),
       Validators.maxLength(80)
     ]],
-    enddate: ['2099-12-31', []],
-    description: ['', [
-      Validators.maxLength(200)
+    enddate: [null, []],
+    description: [null, [
+      Validators.maxLength(200),
+      Validators.pattern(/^[a-zA-ZäöüÄÖÜß0-9 .?!-]*$/)
     ]],
-    question: ['', []],
-    option: ['', []]
+    category: ['', [
+      Validators.required
+    ]],
+    questions: this.formbuilder.array([])
   })
+
+  onYearInput(event: Event): void {
+    limitYearLengthToFourDigits(event, this.userform);
+  }
+
+  get questions(): FormArray {
+    return this.userform.get('questions') as FormArray;
+  }
+
+  addQuestion(): void {
+    this.questions.push(this.createQuestionGroup());
+  }
+
+  createQuestionGroup(): FormGroup {
+    return this.formbuilder.group({
+      questionTitle: ['', [Validators.required]],
+      options: this.formbuilder.array([])
+    });
+  }
+
+  addOption(questionIndex: number): void {
+    const optionsArray = this.getOptionsFromArray(questionIndex);
+    optionsArray.push(this.createOptionGroup());
+  }
+
+  createOptionGroup(): FormGroup {
+    return this.formbuilder.group({
+      optionTitle: ['', [Validators.required]]
+    })
+  }
+
+  getOptionsFromArray(questionIndex: number): FormArray {
+    const questionGroup = this.questions.at(questionIndex) as FormGroup
+    return questionGroup.get('options') as FormArray;
+  }
+
+  clearField(formField: string) {
+    this.userform.get(formField)?.reset('')
+  }
 
   onChangeCategory(event: Event): void {
     const selectElement = event.target as HTMLSelectElement;
@@ -73,37 +117,36 @@ export class SurveyCreate {
   }
 
   openPublishedPopover(anchor: HTMLElement, popover: HTMLElement) {
-        popover.showPopover(); /* 1. Popover kurz bereitstellen für die Maße */
-    var { leftPosition, padding, popoverWidth, viewportWidth, topPosition } = this.defineProperties(anchor, popover);
+    popover.showPopover(); /* 1. Popover kurz bereitstellen für die Maße */
+    let { leftPosition, padding, popoverWidth, viewportWidth, topPosition } = this.defineProperties(anchor, popover);
+    /*  2. Button-Position und Popover-Maße holen, 3. Höhe berechnen, 
+        4a. Breite berechnen mit Randschutz (Safe Guard, 10px Mindestabstand zum Bildschirmrand), 
+        4b. Berechne idealen left-Wert (rechtsbündig zum Button) */
     leftPosition = this.recalculatePopoverPosition(leftPosition, padding, popoverWidth, viewportWidth);
     popover.style.top = `${topPosition}px`; /* 5. Styles zuweisen */
     popover.style.left = `${leftPosition}px`;
     setTimeout(() => this.closePopover(), 1500);
-}
+  }
 
 
   private defineProperties(anchor: HTMLElement, popover: HTMLElement) {
-    /* 2. Button-Position und Popover-Maße holen */
     const rect = anchor.getBoundingClientRect();
     const popoverWidth = popover.offsetWidth;
     const popoverHeight = popover.offsetHeight;
     const viewportWidth = window.innerWidth; /* Die Gesamtbreite des Bildschirms */
-    /* 3. Höhe berechnen */
     const gap = 15;
     const topPosition = rect.top - popoverHeight - gap;
-    /* 4. Breite berechnen mit Randschutz (Safe Guard) */
-    const padding = 10; // 10px Mindestabstand zum Bildschirmrand
-    /* Berechne den idealen left-Wert (rechtsbündig zum Button) */
+    const padding = 10;
     let leftPosition = rect.right - popoverWidth;
     return { leftPosition, padding, popoverWidth, viewportWidth, topPosition };
   }
 
   private recalculatePopoverPosition(leftPosition: number, padding: number, popoverWidth: number, viewportWidth: number) {
-    /* FEHLERSCHUTZ LINKS: Verhindert, dass das Popover links aus dem Bildschirm ragt */
+    /* Fehlerschutz LINKS: Verhindert, dass das Popover links aus dem Bildschirm ragt */
     if (leftPosition < padding) {
       leftPosition = padding;
     }
-    /* FEHLERSCHUTZ RECHTS: Verhindert, dass es rechts hinausragt (falls der Button sehr weit rechts liegt) */
+    /* Fehlerschutz RECHTS: Verhindert, dass es rechts hinausragt (falls der Button sehr weit rechts liegt) */
     if (leftPosition + popoverWidth > viewportWidth - padding) {
       leftPosition = viewportWidth - popoverWidth - padding;
     }

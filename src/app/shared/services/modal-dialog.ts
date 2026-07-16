@@ -5,14 +5,17 @@ import { Injectable, signal } from '@angular/core';
 })
 export class ModalDialog {
 
-isCreateSurveyModalOpen = signal<boolean>(false);
+  
 
-openCreateSurveyModal() {
-  this.isCreateSurveyModalOpen.set(true);
-}
+  isCreateSurveyModalOpen = signal<boolean>(false);
 
-closeCreateSurveyModal(){
-  this.isCreateSurveyModalOpen.set(false);
-}
+  openCreateSurveyModal() {
+    this.isCreateSurveyModalOpen.set(true);
+  }
+
+  closeCreateSurveyModal() {
+    this.isCreateSurveyModalOpen.set(false);
+
+  }
 
 }
