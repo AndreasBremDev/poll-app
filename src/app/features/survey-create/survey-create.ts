@@ -4,10 +4,11 @@ import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } fr
 import { Supabase } from '../../shared/services/supabase';
 import { maxYearValidator } from './../../shared/validators/custom-validators';
 import { limitYearLengthToFourDigits } from './../../shared/validators/custom-validators';
+import { IndexToLetterPipe } from '../../shared/pipes/index-to-letter.pipe';
 
 @Component({
   selector: 'app-survey-create',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, IndexToLetterPipe],
   templateUrl: './survey-create.html',
   styleUrl: './survey-create.scss',
 })
@@ -42,6 +43,10 @@ export class SurveyCreate {
     questions: this.formbuilder.array([])
   })
 
+  ngOnInit(){
+    this.addQuestion();
+  }
+
   onYearInput(event: Event): void {
     limitYearLengthToFourDigits(event, this.userform);
   }
@@ -52,6 +57,9 @@ export class SurveyCreate {
 
   addQuestion(): void {
     this.questions.push(this.createQuestionGroup());
+    const newQuestionIndex = this.questions.length -1;
+    this.addOption(newQuestionIndex);
+    this.addOption(newQuestionIndex);
   }
 
   createQuestionGroup(): FormGroup {
@@ -63,6 +71,7 @@ export class SurveyCreate {
 
   addOption(questionIndex: number): void {
     const optionsArray = this.getOptionsFromArray(questionIndex);
+    if (optionsArray.length >= 6) return;
     optionsArray.push(this.createOptionGroup());
   }
 
