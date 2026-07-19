@@ -43,7 +43,7 @@ export class SurveyCreate {
     questions: this.formbuilder.array([])
   })
 
-  ngOnInit(){
+  ngOnInit() {
     this.addQuestion();
   }
 
@@ -55,11 +55,26 @@ export class SurveyCreate {
     return this.userform.get('questions') as FormArray;
   }
 
+  getOptionsFromArray(questionIndex: number): FormArray {
+    const questionGroup = this.questions.at(questionIndex) as FormGroup
+    return questionGroup.get('options') as FormArray;
+  }
+
   addQuestion(): void {
     this.questions.push(this.createQuestionGroup());
-    const newQuestionIndex = this.questions.length -1;
+    const newQuestionIndex = this.questions.length - 1;
     this.addOption(newQuestionIndex);
     this.addOption(newQuestionIndex);
+  }
+
+  addOption(questionIndex: number): void {
+    const optionsArray = this.getOptionsFromArray(questionIndex);
+    if (optionsArray.length >= 6) return;
+    optionsArray.push(this.createOptionGroup());
+  }
+
+  clearField(formField: string) {
+    this.userform.get(formField)?.reset('')
   }
 
   createQuestionGroup(): FormGroup {
@@ -69,25 +84,36 @@ export class SurveyCreate {
     });
   }
 
-  addOption(questionIndex: number): void {
-    const optionsArray = this.getOptionsFromArray(questionIndex);
-    if (optionsArray.length >= 6) return;
-    optionsArray.push(this.createOptionGroup());
-  }
-
   createOptionGroup(): FormGroup {
     return this.formbuilder.group({
       optionTitle: ['', [Validators.required]]
     })
   }
 
-  getOptionsFromArray(questionIndex: number): FormArray {
-    const questionGroup = this.questions.at(questionIndex) as FormGroup
-    return questionGroup.get('options') as FormArray;
+  deleteQuestion(questionIndex: number): void {
+    if (this.questions.length <= 1) return;
+    this.questions.removeAt(questionIndex);
   }
 
-  clearField(formField: string) {
-    this.userform.get(formField)?.reset('')
+  deleteOption(questionIndex: number, optionIndex: number){
+    const optionsArray = this.questions.at(questionIndex).get('options') as FormArray;
+    if (optionsArray) {
+      if (optionsArray.length <= 2) return;
+      optionsArray.removeAt(optionIndex);
+    }
+  }
+
+  clearQuestionInputValueByIndex(questionIndex: number): void {
+    const questionGroup = this.questions.at(questionIndex);
+    questionGroup.get('questionTitle')?.setValue('');
+  }
+
+  clearOptionInputValueByIndex(questionIndex: number, optionIndex: number): void {
+    const optionsArray = this.questions.at(questionIndex).get('options') as FormArray;
+    if (optionsArray) {
+      const optionGroup = optionsArray.at(optionIndex);
+      optionGroup.get('optionTitle')?.setValue('');
+    }
   }
 
   onChangeCategory(event: Event): void {
