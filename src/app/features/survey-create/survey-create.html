@@ -131,7 +131,7 @@
                                     <input id="option-{{optionIndex}}" type="text" formControlName="optionTitle"
                                         placeholder="Option-{{optionIndex + 1}}" maxlength="80"
                                         class="create__form__input">
-                                    @if (questions.length > 2){
+                                    @if (getOptionsFromArray(questionIndex).length > 2){
                                     <button class="create__form__delete-btn" (click)="deleteOption(questionIndex, optionIndex)">
                                         <svg width="18" height="20" viewBox="0 0 18 20" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
