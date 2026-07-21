@@ -175,6 +175,10 @@
             &__question-option-details {
                 display: flex;
                 flex-direction: column;
+
+            }
+
+            &__question-option-details--margin-bottom {
                 margin-bottom: 40px;
             }
 
@@ -194,6 +198,8 @@
                     -ms-user-select: none;
                     user-select: none;
                     font-size: mx.px-to-rem(16);
+                    font-weight: 400;
+                    font-style: normal;
                 }
 
                 &__multiple input {
@@ -271,10 +277,16 @@
                 border-bottom: 2px solid var(--font_white);
             }
 
-            &:hover {
-                background-color: var(--font_white-hover);
+            @media (pointer: fine) and (hover:hover) {
+                &:not(.no-hover):hover {
+                    background-color: var(--font_white-hover);
+                    cursor: pointer;
+                }
             }
 
+            &.no-hover {
+                pointer-events: none;
+            }
         }
 
         &__publish-btn {
@@ -357,6 +369,10 @@
             &:focus-visible {
                 background-color: var(--terciary_orange);
             }
+
+            &.ng-invalid.ng-touched {
+                outline: 3px solid red;
+            }
         }
 
         &__textarea {
@@ -396,6 +412,10 @@
                 transform: translateY(-50%) rotate(180deg);
             }
         }
+
+        &__mandatory {
+            margin-top: 40px;
+        }
     }
 }
 
@@ -411,8 +431,15 @@
     }
 }
 
-label {
+.custom-focusable:focus-visible {
+    outline: -webkit-focus-ring-color auto 1px;
+}
+
+label,
+.label {
     font-size: mx.px-to-rem(18);
+    font-weight: 700;
+    font-style: bold;
     display: flex;
     align-items: center;
     justify-self: flex-start;

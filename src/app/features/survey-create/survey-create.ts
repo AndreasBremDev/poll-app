@@ -2,9 +2,9 @@ import { Component, ElementRef, inject, signal, viewChild } from '@angular/core'
 import { ModalDialog } from '../../shared/services/modal-dialog';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Supabase } from '../../shared/services/supabase';
-import { maxYearValidator } from './../../shared/validators/custom-validators';
 import { limitYearLengthToFourDigits } from './../../shared/validators/custom-validators';
 import { IndexToLetterPipe } from '../../shared/pipes/index-to-letter.pipe';
+import { dateValidator } from './../../shared/validators/custom-validators'
 
 @Component({
   selector: 'app-survey-create',
@@ -30,9 +30,10 @@ export class SurveyCreate {
     title: ['', [
       Validators.required,
       Validators.minLength(3),
-      Validators.maxLength(80)
+      Validators.maxLength(80),
+      Validators.pattern(/^[a-zA-ZäöüÄÖÜß0-9 .?!-]*$/)
     ]],
-    enddate: [null, []],
+    enddate: [null, [dateValidator()]],
     description: [null, [
       Validators.maxLength(200),
       Validators.pattern(/^[a-zA-ZäöüÄÖÜß0-9 .?!-]*$/)
@@ -79,14 +80,14 @@ export class SurveyCreate {
 
   createQuestionGroup(): FormGroup {
     return this.formbuilder.group({
-      questionTitle: ['', [Validators.required]],
+      questionTitle: ['', [Validators.required,Validators.pattern(/^[a-zA-ZäöüÄÖÜß0-9 .?!-]*$/)]],
       options: this.formbuilder.array([])
     });
   }
 
   createOptionGroup(): FormGroup {
     return this.formbuilder.group({
-      optionTitle: ['', [Validators.required]]
+      optionTitle: ['', [Validators.required,Validators.pattern(/^[a-zA-ZäöüÄÖÜß0-9 .?!-]*$/)]]
     })
   }
 
@@ -95,7 +96,7 @@ export class SurveyCreate {
     this.questions.removeAt(questionIndex);
   }
 
-  deleteOption(questionIndex: number, optionIndex: number){
+  deleteOption(questionIndex: number, optionIndex: number) {
     const optionsArray = this.questions.at(questionIndex).get('options') as FormArray;
     if (optionsArray) {
       if (optionsArray.length <= 2) return;
@@ -113,6 +114,15 @@ export class SurveyCreate {
     if (optionsArray) {
       const optionGroup = optionsArray.at(optionIndex);
       optionGroup.get('optionTitle')?.setValue('');
+    }
+  }
+
+  trimControl(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input && input.value) {
+      input.value = input.value.trim();
+      /* Signal an Angular: Wert geändert, FormControl aktualiert */
+      input.dispatchEvent(new Event('input'));
     }
   }
 
