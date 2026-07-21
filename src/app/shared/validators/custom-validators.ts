@@ -69,8 +69,5 @@ function isYearInRange(inputDate: Date): ValidationErrors | null {
     if (inputYear > maxYear) {
         return { maxYear: true };
     }
-    if (inputYear < currentYear) {
-        return { minYear: true };
-    }
     return null; /* is year in range of today and +2 */
 }
