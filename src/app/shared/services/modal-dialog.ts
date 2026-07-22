@@ -1,11 +1,9 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ModalDialog {
-
-  
 
   isCreateSurveyModalOpen = signal<boolean>(false);
 
@@ -15,7 +13,6 @@ export class ModalDialog {
 
   closeCreateSurveyModal() {
     this.isCreateSurveyModalOpen.set(false);
-
   }
 
 }

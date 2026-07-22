@@ -1,6 +1,6 @@
 import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { ModalDialog } from '../../shared/services/modal-dialog';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Supabase } from '../../shared/services/supabase';
 import { limitYearLengthToFourDigits } from './../../shared/validators/custom-validators';
 import { IndexToLetterPipe } from '../../shared/pipes/index-to-letter.pipe';
@@ -42,7 +42,27 @@ export class SurveyCreate {
       Validators.required
     ]],
     questions: this.formbuilder.array([])
-  })
+  });
+
+  createQuestionGroup(): FormGroup {
+    return this.formbuilder.group({
+      questionTitle: ['', [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.pattern(/^[a-zA-ZäöüÄÖÜß0-9 .?!-]*$/)]],
+      multiple: [false],
+      options: this.formbuilder.array([])
+    });
+  }
+
+  createOptionGroup(): FormGroup {
+    return this.formbuilder.group({
+      optionTitle: ['', [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.pattern(/^[a-zA-ZäöüÄÖÜß0-9 .?!-]*$/)]]
+    })
+  }
 
   ngOnInit() {
     this.addQuestion();
@@ -50,6 +70,14 @@ export class SurveyCreate {
 
   onYearInput(event: Event): void {
     limitYearLengthToFourDigits(event, this.userform);
+  }
+
+  checkNativeValidity(inputElement: HTMLInputElement, controlName: string): void {
+    const control = this.userform.get(controlName);
+    if (!inputElement.validity.valid) { /* validity.valid = false, when i.e. 'tt.01.0022' */
+      control?.setErrors({ invalidDate: true }); /* set error manually in Angular FormControl */
+      control?.markAsTouched();
+    }
   }
 
   get questions(): FormArray {
@@ -74,47 +102,31 @@ export class SurveyCreate {
     optionsArray.push(this.createOptionGroup());
   }
 
+  deleteQuestion(questionIndex: number): void {
+    const questionGroup = this.questions.at(questionIndex) as FormGroup;
+    const titleControl = questionGroup.get('questionTitle');
+    this.clearOrRemoveItem(titleControl, this.questions, questionIndex, 1)
+  }
+
+  deleteOption(questionIndex: number, optionIndex: number): void {
+    const optionsArray = this.questions.at(questionIndex).get('options') as FormArray;
+    const titleControl = optionsArray.at(optionIndex).get('optionTitle');
+    this.clearOrRemoveItem(titleControl, optionsArray, optionIndex, 2);
+  }
+
+  clearOrRemoveItem(control: AbstractControl | null, array: FormArray, index: number, minLength: number): void {
+    if (control && control.value.trim() !== '') {
+      control.setValue('');
+      control.markAsUntouched();
+      return;
+    }
+    if (array.length > minLength) {
+      array.removeAt(index);
+    }
+  }
+
   clearField(formField: string) {
     this.userform.get(formField)?.reset('')
-  }
-
-  createQuestionGroup(): FormGroup {
-    return this.formbuilder.group({
-      questionTitle: ['', [Validators.required,Validators.pattern(/^[a-zA-ZäöüÄÖÜß0-9 .?!-]*$/)]],
-      options: this.formbuilder.array([])
-    });
-  }
-
-  createOptionGroup(): FormGroup {
-    return this.formbuilder.group({
-      optionTitle: ['', [Validators.required,Validators.pattern(/^[a-zA-ZäöüÄÖÜß0-9 .?!-]*$/)]]
-    })
-  }
-
-  deleteQuestion(questionIndex: number): void {
-    if (this.questions.length <= 1) return;
-    this.questions.removeAt(questionIndex);
-  }
-
-  deleteOption(questionIndex: number, optionIndex: number) {
-    const optionsArray = this.questions.at(questionIndex).get('options') as FormArray;
-    if (optionsArray) {
-      if (optionsArray.length <= 2) return;
-      optionsArray.removeAt(optionIndex);
-    }
-  }
-
-  clearQuestionInputValueByIndex(questionIndex: number): void {
-    const questionGroup = this.questions.at(questionIndex);
-    questionGroup.get('questionTitle')?.setValue('');
-  }
-
-  clearOptionInputValueByIndex(questionIndex: number, optionIndex: number): void {
-    const optionsArray = this.questions.at(questionIndex).get('options') as FormArray;
-    if (optionsArray) {
-      const optionGroup = optionsArray.at(optionIndex);
-      optionGroup.get('optionTitle')?.setValue('');
-    }
   }
 
   trimControl(event: Event): void {
@@ -197,4 +209,10 @@ export class SurveyCreate {
     }
     return leftPosition;
   }
+
+  closeModal() {
+    this.userform.reset({ category: '' })
+    this.modalDialog.isCreateSurveyModalOpen.set(false);
+  }
+
 }

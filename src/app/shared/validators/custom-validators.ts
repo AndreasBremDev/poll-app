@@ -22,8 +22,7 @@ export function limitYearLengthToFourDigits(event: Event, form: FormGroup): void
         const correctedYear = year.slice(0, 4);
         parts[0] = correctedYear;
         input.value = parts.join('-');
-        /* Ganz wichtig bei Reactive Forms: Wir müssen Angular mitteilen, 
-         dass wir den Wert im DOM manuell geändert haben! */
+        /* Important with Reactive Forms: Angular needs to know, we changed DOM manually */
         form.get('enddate')?.setValue(input.value, { emitEvent: false });
     }
 }
