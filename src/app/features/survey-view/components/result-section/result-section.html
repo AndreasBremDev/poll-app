@@ -4,20 +4,20 @@
 @if (pollVoteTotal() !== 0) {
 
 <section class="result-section__box-main">
-    @for (pq of poll.poll_question; track pq.question.id; let index = $index) {
+    @for (q of poll.questions; track q.id; let index = $index) {
     <div class="result-section__box-question">
         <h4 class="result-section__question-text">
-            {{index+1}}.&nbsp;{{ pq.question.question }}</h4>
+            {{index+1}}.&nbsp;{{ q.question }}</h4>
 
-        @for (opt of pq.question.options; track opt.id; let i = $index) {
+        @for (opt of q.options; track opt.id; let i = $index) {
         <article class="result-section__box-option">
             <span class="result-section__index-letter">
                 {{i | indexToLetter }}</span>
             <div class="result-section__progress-bar">
                 <div class="result-section__progress-bar--slider"
-                    [style.width]="(opt.vote | votePercentage : pq.question.options) +'%'"></div>
+                    [style.width]="(opt.vote | votePercentage : q.options) +'%'"></div>
             </div>
-            <p class="result-section__option-text">{{ (opt.vote | votePercentage : pq.question.options) +'%' }}</p>
+            <p class="result-section__option-text">{{ (opt.vote | votePercentage : q.options) +'%' }}</p>
         </article>
 
         }

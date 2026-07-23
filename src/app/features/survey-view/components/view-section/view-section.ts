@@ -34,13 +34,13 @@ export class ViewSection {
 
   private updateVoteChanges(oldPoll: Poll, questionId: number, optId: number, oldOptIds: number[] | undefined, isChecked: boolean): Poll {
     const updatedPoll = structuredClone(oldPoll);
-    const targetQuestion = updatedPoll.poll_question.find(pq => pq.question.id === questionId);
+    const targetQuestion = updatedPoll.questions.find(q => q.id === questionId);
     if (!targetQuestion) return updatedPoll;
-    if (!targetQuestion.question.multiple && oldOptIds !== undefined) { /* here: check if oldOption exists, if yes, substract oldOption.vote */
-      const oldOption = targetQuestion.question.options.find(opt => opt.id === oldOptIds[0]);
+    if (!targetQuestion.multiple && oldOptIds !== undefined) { /* here: check if oldOption exists, if yes, substract oldOption.vote */
+      const oldOption = targetQuestion.options.find(opt => opt.id === oldOptIds[0]);
       if (oldOption) oldOption.vote--;
     }
-    const targetOption = targetQuestion.question.options.find(opt => opt.id === optId);
+    const targetOption = targetQuestion.options.find(opt => opt.id === optId);
     if (targetOption) {
       isChecked ? targetOption.vote++ : targetOption.vote--;
     }
@@ -49,7 +49,7 @@ export class ViewSection {
 
   private updateSelectionMemory(questionId: number, optionId: number, isChecked: boolean) {
     const poll = this.currentPollView();
-    const isMultiple = poll?.poll_question.find(pq => pq.question.id === questionId)?.question.multiple;
+    const isMultiple = poll?.questions.find(q => q.id === questionId)?.multiple;
     if (isMultiple === false) {
       this.updateRadioOptionsInSelectedOptions(questionId, optionId);
     } else {
@@ -84,8 +84,8 @@ export class ViewSection {
     const poll = this.currentPollView();
     const memory = this.selectedOptions();
     if (!poll) return false;
-    return poll.poll_question.every(pq => {
-      const questionId = pq.question.id;
+    return poll.questions.every(pq => {
+      const questionId = pq.id;
       return memory[questionId] !== undefined && memory[questionId].length > 0
     }) && !this.isVotedAlready
   });
@@ -112,8 +112,8 @@ export class ViewSection {
   }
 
   private createOptIdAndOptVoteArray(poll: Poll, optionsToUpload: { id: number; vote: number; }[]) {
-    for (const pq of poll.poll_question) {
-      for (const opt of pq.question.options) {
+    for (const q of poll.questions) {
+      for (const opt of q.options) {
         optionsToUpload.push({
           id: opt.id,
           vote: opt.vote

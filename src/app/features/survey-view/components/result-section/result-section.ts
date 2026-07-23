@@ -19,8 +19,8 @@ export class ResultSection {
   pollVoteTotal = computed(() => {
     const poll = this.currentPollResult();
     if (!poll) return 0;
-    return poll.poll_question.reduce((grandTotal, pq) => {
-      const questionSum = pq.question.options.reduce((sum, opt) => sum + opt.vote, 0);
+    return poll.questions.reduce((grandTotal, q) => {
+      const questionSum = q.options.reduce((sum, opt) => sum + opt.vote, 0);
       return grandTotal + questionSum;
     }, 0);
 });

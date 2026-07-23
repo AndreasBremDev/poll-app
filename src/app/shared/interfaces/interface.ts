@@ -8,6 +8,7 @@ export interface Question {
     id: number,
     question: string,
     multiple: boolean,
+    "poll_id": number,
     options: Option[]
 }
 
@@ -24,7 +25,7 @@ export interface Poll {
     enddate: string,
     "category-id": number,
     categories: Categories,
-    poll_question: { question: Question }[],
+    questions: Question[],
     daysLeft: number | null;
 }
 

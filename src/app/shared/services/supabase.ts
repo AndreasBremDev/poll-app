@@ -16,8 +16,8 @@ export class Supabase {
   async getData(): Promise<Poll[]> {
     const { data, error } = await this.client
       .from('polls')
-      .select(`*, categories (*), poll_question!inner ( question: questions ( *,
-                    options (*) ) ) `);
+      .select(`*, categories (*), questions ( *,
+                    options (*) ) `);
     if (error) {
       console.error("Supabase getData() Error:", error.message);
       return [];
@@ -78,16 +78,13 @@ export class Supabase {
   sortOptionsById(rawPolls: Poll[]): Poll[]{
     return rawPolls.map(poll => ({
       ...poll,
-      poll_question: poll.poll_question?.map(pq => ({
-        ...pq,
-        question: pq.question ? {
-          ...pq.question,
-          options: pq.question.options
-          ? [...pq.question.options].sort((a, b) => a.id - b.id)
+      questions: poll.questions.map(q => ({
+        ...q,
+          options: q.options
+          ? [...q.options].sort((a, b) => a.id - b.id)
           : []
-        } : pq.question
-      }))
-    }))
+        }))
+    }));
   }
 
 
