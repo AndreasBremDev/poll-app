@@ -15,7 +15,7 @@ export class StartPage {
   supabase = inject(Supabase);
 
   async ngOnInit(): Promise<void> {
-    await this.supabase.getData();
+    await this.supabase.loadPolls();
     await this.supabase.getCategories() || [];
   }
   

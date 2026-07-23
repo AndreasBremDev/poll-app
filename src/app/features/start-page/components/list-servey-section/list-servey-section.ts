@@ -29,9 +29,9 @@ export class ListServeySection {
   private filterStatus_filteredPolls(allPolls: Poll[], status: string) {
     return allPolls.filter(poll => {
       if (status === 'active') {
-        return poll.daysLeft >= 0;
+        return poll.daysLeft === null || poll.daysLeft >= 0;
       } else if (status === 'past') {
-        return poll.daysLeft < 0;
+        return poll.daysLeft !== null && poll.daysLeft < 0;
       } else {
         return true;
       }
@@ -55,6 +55,10 @@ export class ListServeySection {
 
   onChangeStatus(value: 'active' | 'past'): void {
     this.selectedStatus.set(value)
+  }
+
+  isPollActive(poll: Poll): boolean {
+    return poll.daysLeft === null || poll.daysLeft >= 0
   }
 
 }

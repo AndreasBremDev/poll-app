@@ -18,13 +18,13 @@ export class SurveyView {
   route = inject(ActivatedRoute);
   modalDialog = inject(ModalDialog)
 
-  currentPoll = signal<Poll | undefined>(undefined); // note: model = signal, data out to child, in from child
+  currentPoll = signal<Poll | undefined>(undefined); /* note: model = signal, data out to child, in from child */
 
   currentId = 0;
 
   async ngOnInit(): Promise<void> {
     if (this.supabase.polls().length === 0) {
-      await this.supabase.getData();
+      await this.supabase.loadPolls();
     }
     this.currentId = Number(this.route.snapshot.paramMap.get('id'));
     let foundPoll = this.supabase.polls().find(poll => poll.id === this.currentId);

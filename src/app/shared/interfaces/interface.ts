@@ -25,7 +25,7 @@ export interface Poll {
     "category-id": number,
     categories: Categories,
     poll_question: { question: Question }[],
-    daysLeft: number;
+    daysLeft: number | null;
 }
 
 export type SurveyStatus = 'active' | 'past';

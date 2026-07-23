@@ -22,14 +22,16 @@
 
         @for (poll of filteredPolls(); track poll.id) {
         <article class="list__card" 
-        [routerLink]="poll.daysLeft >= 0 ? ['view', poll.id] : null" 
-        [attr.role]="poll.daysLeft >= 0 ? 'link' : null">
+        [routerLink]="isPollActive(poll) ? ['view', poll.id] : null" 
+        [attr.role]="isPollActive(poll) ? 'link' : null">
             <p class="list__card__p">{{ poll.categories.category }}</p>
             <h3 class="list__card__h3">{{ poll.title }}</h3>
 
-            <p class="list__card__countdown">@if (poll.daysLeft >= 0) {
-                Ends in {{ poll.daysLeft }} @if (poll.daysLeft == 1 || poll.daysLeft == -1) {
-                day } @else {days}
+            <p class="list__card__countdown">
+                @if (poll.daysLeft === null){
+                    No end date
+                } @else if (poll.daysLeft >= 0) {
+                Ends in {{ poll.daysLeft }} {{poll.daysLeft === 1 ? 'day' : 'days'}}
                 } @else {Ended}</p>
         </article>
         } @empty {

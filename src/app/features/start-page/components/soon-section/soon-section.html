@@ -8,8 +8,6 @@
 
 		@for (poll of daysFilteredPolls(); track poll.id) {
 
-		<!-- @if (poll.daysLeft >= 0) { -->
-
 		<article class="soon-card" [routerLink]="['view', poll.id]" role="link">
 			<p>{{ poll.categories.category }}</p>
 			<h3 class="soon-card__h3">{{ poll.title }}</h3>
@@ -25,8 +23,6 @@
 			<p class="soon-card__countdown">new servey</p>
 		</article>
 		}
-
-		<!-- } -->
 	
 	</div>
 </section>

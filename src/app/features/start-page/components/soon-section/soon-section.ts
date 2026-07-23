@@ -1,6 +1,7 @@
 import { Component, inject, computed } from '@angular/core';
 import { Supabase } from '../../../../shared/services/supabase';
 import { RouterLink } from '@angular/router';
+import { Poll } from '../../../../shared/interfaces/interface';
 
 
 @Component({
@@ -14,7 +15,10 @@ export class SoonSection {
 
   daysFilteredPolls = computed(() => {
     const allPolls = this.supabase.polls();
-    return allPolls.filter(poll => poll.daysLeft >= 0);
+    return allPolls.filter(
+      (poll): poll is Poll & { daysLeft: number } => 
+      poll.daysLeft !== null && poll.daysLeft >= 0
+    );
   });
 
 }
