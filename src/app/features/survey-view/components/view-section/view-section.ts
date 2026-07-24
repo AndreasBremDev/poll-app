@@ -1,8 +1,9 @@
-import { Component, inject, signal, model, computed, booleanAttribute } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, inject, signal, model, computed, booleanAttribute, effect } from '@angular/core';
+import { Router } from '@angular/router';
 import { Supabase } from '../../../../shared/services/supabase';
 import { Poll } from '../../../../shared/interfaces/interface';
 import { IndexToLetterPipe } from '../../../../shared/pipes/index-to-letter.pipe';
+import { SinglePollVotes, PollVotesStorage } from '../../../../shared/interfaces/interface';
 
 @Component({
   selector: 'app-view-section',
@@ -15,14 +16,53 @@ import { IndexToLetterPipe } from '../../../../shared/pipes/index-to-letter.pipe
 export class ViewSection {
   supabase = inject(Supabase);
   private router = inject(Router);
-  isVotedAlready = false;
-
-  ngOnInit() {
-    this.loadFromLocalStorage();
-  }
 
   currentPollView = model<Poll | undefined>();
-  selectedOptions = signal<Record<number, number[]>>({});
+  selectedOptions = signal<SinglePollVotes>({});
+  pollVotesStorage = signal<PollVotesStorage>(this.getInitialStorage());
+
+  hasVotedCurrentPoll = computed(() => {
+    const currentPollId = this.currentPollView()?.id;
+    if (!currentPollId) return false;
+    return !!this.pollVotesStorage()[currentPollId];
+  });
+
+  isPollValid = computed(() => {
+    const poll = this.currentPollView();
+    const memory = this.selectedOptions();
+    if (!poll) return false;
+    const allQuestionsAnswered = poll.questions.every(pq => {
+      const questionId = pq.id;
+      return memory[questionId] !== undefined && memory[questionId].length > 0
+    })
+    return allQuestionsAnswered && !this.hasVotedCurrentPoll();
+  });
+
+  isPollDisabled = computed(() => {
+    if (this.hasVotedCurrentPoll()) return true;
+    const poll = this.currentPollView();
+    if (poll && poll.daysLeft != null && poll.daysLeft < 0) {
+      return true
+    };
+    return false;
+  })
+
+  constructor() {
+    effect(() => {
+      const currentPollId = this.currentPollView()?.id;
+      if (!currentPollId) return;
+      const storage = this.pollVotesStorage();
+      const savedVotes = storage[currentPollId];
+      if (savedVotes){
+        this.selectedOptions.set(savedVotes)
+      }
+    })
+  }
+
+  isOptionSelected(questionId:number, optionId: number): boolean {
+    const selectedForQuestion = this.selectedOptions()[questionId];
+    return selectedForQuestion ? selectedForQuestion.includes(optionId) : false;
+  }
 
   updateSignal(event: Event, optionId: number, questionId: number) {
     const isChecked = (event.target as HTMLInputElement).checked;
@@ -80,29 +120,18 @@ export class ViewSection {
     }));
   }
 
-  isPollValid = computed(() => {
-    const poll = this.currentPollView();
-    const memory = this.selectedOptions();
-    if (!poll) return false;
-    return poll.questions.every(pq => {
-      const questionId = pq.id;
-      return memory[questionId] !== undefined && memory[questionId].length > 0
-    }) && !this.isVotedAlready
-  });
-
   async uploadPollVotes() {
     if (this.isPollValid()) {
       const poll = this.currentPollView();
       if (!poll) return;
       const optionsToUpload: { id: number; vote: number }[] = [];
-      this.createOptIdAndOptVoteArray(poll, optionsToUpload);
-      await this.sendOptionsToDatabaseSupabase(optionsToUpload);
-      this.isVotedAlready = true;
+      this.createOptIdAndOptVoteArray_uploadPollVotes(poll, optionsToUpload);
+      await this.sendOptionsToDatabaseSupabase_uploadPollVotes(optionsToUpload);
       this.saveToLocalStorage();
     }
   }
 
-  private async sendOptionsToDatabaseSupabase(optionsToUpload: { id: number; vote: number; }[]) {
+  private async sendOptionsToDatabaseSupabase_uploadPollVotes(optionsToUpload: { id: number; vote: number; }[]) {
     try {
       await this.supabase.upsertVoteData(optionsToUpload);
       this.router.navigate(['']);
@@ -111,7 +140,7 @@ export class ViewSection {
     }
   }
 
-  private createOptIdAndOptVoteArray(poll: Poll, optionsToUpload: { id: number; vote: number; }[]) {
+  private createOptIdAndOptVoteArray_uploadPollVotes(poll: Poll, optionsToUpload: { id: number; vote: number; }[]) {
     for (const q of poll.questions) {
       for (const opt of q.options) {
         optionsToUpload.push({
@@ -125,17 +154,16 @@ export class ViewSection {
   saveToLocalStorage() {
     const currentPollId = this.currentPollView()?.id;
     if (!currentPollId) return;
-    const localData =
-      localStorage.setItem('isVotedAlready', JSON.stringify(this.isVotedAlready))
-
+    const rawData = localStorage.getItem('pollVotesStorage');                 /* 1: current state from LS */
+    const currentStorage: PollVotesStorage = rawData ? JSON.parse(rawData) : {};
+    currentStorage[currentPollId] = this.selectedOptions();                   /* 2: save current Options (SinglePollVotes) under poll-id */
+    localStorage.setItem('pollVotesStorage', JSON.stringify(currentStorage)); /* 3: save in LS */
+    this.pollVotesStorage.set(currentStorage);                                /* 4: update signal */
   }
 
-  loadFromLocalStorage(): boolean {
-    let isVotedAlreadyLoad: boolean = JSON.parse(localStorage.getItem('isVotedAlready') ?? 'false')
-    this.isVotedAlready = isVotedAlreadyLoad;
-    return this.isVotedAlready;
+  getInitialStorage(): PollVotesStorage {
+    const rawData = localStorage.getItem('pollVotesStorage');
+    return rawData ? JSON.parse(rawData) : {}
   }
-
-
 
 }

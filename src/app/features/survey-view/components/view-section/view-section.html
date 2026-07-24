@@ -2,7 +2,8 @@
 
 <article class="view-section__box__parent">
     <section class="view-section__box__child__title-section">
-        <p class="view-section__published">published</p>
+        <p class="view-section__published">
+            @if (!hasVotedCurrentPoll()) {published} @else {voted}</p>
         <div class="view-section__days-and-category">
             <p class="">Ends in {{ poll.daysLeft }} @if (poll.daysLeft == 1 || poll.daysLeft ==
                 -1)
@@ -25,29 +26,31 @@
             @for (opt of pq.options; track opt.id; let optionIndex = $index) {
             <label class="view-section__option__container">
 
-                @if(pq.multiple){
-                <input type="checkbox" [name]="'option-' + opt.id" [value]="opt.id" 
-                (change)="updateSignal($event, opt.id, pq.id)">
-
-                } @else {
-                <input type="radio" [name]="'question-' + pq.id" [value]="opt.id" 
-                (change)="updateSignal($event, opt.id, pq.id)">
-                }
+                <input [type]="pq.multiple ? 'checkbox' : 'radio'"
+                    [name]="pq.multiple ? ('option-' + opt.id) : ('question-' + pq.id)" [value]="opt.id"
+                    [disabled]="isPollDisabled()" [checked]="isOptionSelected(pq.id, opt.id)"
+                    (change)="updateSignal($event, opt.id, pq.id)">
                 <div class="view-section__option__row">
                     <span class="view-section__option__letter-bold">
                         {{optionIndex | indexToLetter }}.</span>
                     <span class="view-section__option__text">{{opt.option }}</span>
                 </div>
-            
+
             </label>
             }
         </div>
         }
     </section>
 
+    @if (!hasVotedCurrentPoll()) {
     <button class="view-section__box__child__vote-button" [disabled]="!isPollValid()" (click)="uploadPollVotes()">
-        @if (!isVotedAlready){Complete survey} @else {I completed the survey already}
+        Complete survey
     </button>
+    } @else {
+    <div class="view-section__box__child__voted-badge">
+        I completed the survey already
+    </div>
+    }
 
 </article>
 }

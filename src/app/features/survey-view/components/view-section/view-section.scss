@@ -41,6 +41,15 @@
                     cursor: default;
                 }
             }
+
+            &__voted-badge {
+                background-color: var(--primary_orange-disabled);
+                color: var(--primary_purple);
+                padding: 8px 12px;
+                margin-top: mx.px-to-rem(24);
+                align-self: self-end;
+                border-radius: 10px;
+            }
         }
     }
 
@@ -95,7 +104,6 @@
             padding-left: 8px;
             padding-block: 3px;
             margin-bottom: 8px;
-            cursor: pointer;
             font-size: mx.px-to-rem(16);
             -webkit-user-select: none;
             -moz-user-select: none;
@@ -103,9 +111,10 @@
             user-select: none;
 
             @media (pointer:fine) and (hover: hover) {
-                &:hover {
+                &:not(:has(input:disabled)):hover {
                     background-color: var(--secondary_orange-hover);
                     border-radius: 3px;
+                    cursor: pointer;
                 }
             }
         }

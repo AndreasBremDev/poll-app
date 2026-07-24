@@ -63,3 +63,7 @@ export interface SurveyFormValue {
         }[];
     }[];
 }
+
+export type SinglePollVotes = Record<number, number[]>;
+
+export type PollVotesStorage = Record<number, SinglePollVotes>;
