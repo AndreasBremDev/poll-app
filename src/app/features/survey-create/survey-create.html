@@ -55,7 +55,7 @@
                             tabindex="0" class="custom-focusable">
                             <option value="" selected disabled>Sort by category *</option>
                             @for (cat of supabase.categories(); track cat.id){
-                            <option value="{{ cat.category }}">{{ cat.category }}</option>
+                            <option [value]="cat.id">{{ cat.category }}</option>
                             }
                         </select>
                     </div>
@@ -185,7 +185,7 @@
 </section>
 <section class="create__form__box__publish">
     <button class="create__form__publish-btn" [disabled]="userform.invalid" #anchorBtn
-        (click)="openPublishedPopover(anchorBtn, popoverRef)">
+        (click)="onSubmit(anchorBtn, popoverRef)">
         Publish
         <svg class="create__form__publish-btn__icon" width="18" height="16" viewBox="0 0 18 16" fill="none"
             xmlns="http://www.w3.org/2000/svg">

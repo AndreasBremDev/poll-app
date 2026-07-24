@@ -5,6 +5,7 @@ import { Supabase } from '../../shared/services/supabase';
 import { limitYearLengthToFourDigits } from './../../shared/validators/custom-validators';
 import { IndexToLetterPipe } from '../../shared/pipes/index-to-letter.pipe';
 import { dateValidator } from './../../shared/validators/custom-validators'
+import { SurveyFormValue, UploadOptionTable, UploadPollTable, UploadQuestionTable } from '../../shared/interfaces/interface';
 
 @Component({
   selector: 'app-survey-create',
@@ -59,7 +60,6 @@ export class SurveyCreate {
     return this.formbuilder.group({
       optionTitle: ['', [
         Validators.required,
-        Validators.minLength(3),
         Validators.pattern(/^[a-zA-ZäöüÄÖÜß0-9 .?!-]*$/)]]
     })
   }
@@ -135,7 +135,7 @@ export class SurveyCreate {
       input.value = input.value.trim();
       /* Signal an Angular: Wert geändert, FormControl aktualiert */
       input.dispatchEvent(new Event('input'));
-    }
+    }    
   }
 
   onChangeCategory(event: Event): void {
@@ -144,6 +144,20 @@ export class SurveyCreate {
     this.selectedCategory.set(value);
     selectElement.blur();
   }
+
+  async onSubmit(anchorBtn: HTMLElement, popoverRef: HTMLElement) {
+  if (this.userform.valid) {
+    try {
+      this.userform.setErrors({customError: true});
+      const formValue = this.userform.value as SurveyFormValue;
+      await this.supabase.saveSurvey(formValue);
+      this.openPublishedPopover(anchorBtn, popoverRef)
+      setTimeout(() => {this.closeModal()},1500);
+    } catch (err) {
+      console.error('upload to supabase error', err)
+    }
+  }
+}
 
   private popover = viewChild<ElementRef<HTMLElement>>('popoverRef');
 

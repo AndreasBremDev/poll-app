@@ -104,7 +104,7 @@ export class ViewSection {
 
   private async sendOptionsToDatabaseSupabase(optionsToUpload: { id: number; vote: number; }[]) {
     try {
-      await this.supabase.putData(optionsToUpload);
+      await this.supabase.upsertVoteData(optionsToUpload);
       this.router.navigate(['']);
     } catch (err) {
       console.error('Upload war NICHT erfolgreich - etwas ist schiefgegangen: ', err);
