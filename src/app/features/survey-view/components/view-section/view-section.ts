@@ -1,4 +1,4 @@
-import { Component, inject, signal, model, computed, booleanAttribute, effect } from '@angular/core';
+import { Component, inject, signal, model, computed, effect } from '@angular/core';
 import { Router } from '@angular/router';
 import { Supabase } from '../../../../shared/services/supabase';
 import { Poll } from '../../../../shared/interfaces/interface';

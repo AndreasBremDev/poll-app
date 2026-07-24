@@ -9,9 +9,14 @@ import { environment } from '../../../environments/environment';
 export class Supabase {
 
   client = createClient(environment.SUPABASE_URL, environment.SUPABASE_KEY);
+  pollChannel: RealtimeChannel | null = null;
 
   polls = signal<Poll[]>([]);
   categories = signal<Categories[]>([]);
+
+  constructor() {
+    this.initRealtimeSubscription();
+  }
 
   async getData(): Promise<Poll[]> {
     const { data, error } = await this.client
@@ -31,6 +36,33 @@ export class Supabase {
     processedPolls = this.sortOptionsById(processedPolls);
     this.polls.set(processedPolls);
     return processedPolls
+  }
+
+  initRealtimeSubscription(): void {
+    this.pollChannel = this.client
+      .channel('schema-db-changes')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'polls' },
+        () => this.loadPolls()
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'questions' },
+        () => this.loadPolls()
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'options' },
+        () => this.loadPolls()
+      )
+      .subscribe();
+  }
+
+  ngOnDestroy(): void {
+    if (this.pollChannel) {
+      this.client.removeChannel(this.pollChannel);
+    }
   }
 
   async upsertVoteData(optionsToUpload: { id: number; vote: number }[]) {

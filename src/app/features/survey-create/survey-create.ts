@@ -5,7 +5,7 @@ import { Supabase } from '../../shared/services/supabase';
 import { limitYearLengthToFourDigits } from './../../shared/validators/custom-validators';
 import { IndexToLetterPipe } from '../../shared/pipes/index-to-letter.pipe';
 import { dateValidator } from './../../shared/validators/custom-validators'
-import { SurveyFormValue, UploadOptionTable, UploadPollTable, UploadQuestionTable } from '../../shared/interfaces/interface';
+import { SurveyFormValue } from '../../shared/interfaces/interface';
 
 @Component({
   selector: 'app-survey-create',
@@ -20,6 +20,7 @@ export class SurveyCreate {
   selectedCategory = signal<string>('all');
 
   formbuilder = inject(FormBuilder)
+  readonly allowedPattern = /^[a-zA-ZäöüÄÖÜß0-9 .,?!&()-]*$/;
 
   supabase = inject(Supabase)
 
@@ -32,12 +33,14 @@ export class SurveyCreate {
       Validators.required,
       Validators.minLength(3),
       Validators.maxLength(80),
-      Validators.pattern(/^[a-zA-ZäöüÄÖÜß0-9 .?!-]*$/)
+      Validators.pattern(this.allowedPattern)
     ]],
-    enddate: [null, [dateValidator()]],
+    enddate: [null, [
+      dateValidator()
+    ]],
     description: [null, [
       Validators.maxLength(200),
-      Validators.pattern(/^[a-zA-ZäöüÄÖÜß0-9 .?!-]*$/)
+      Validators.pattern(this.allowedPattern)
     ]],
     category: ['', [
       Validators.required
@@ -50,7 +53,7 @@ export class SurveyCreate {
       questionTitle: ['', [
         Validators.required,
         Validators.minLength(3),
-        Validators.pattern(/^[a-zA-ZäöüÄÖÜß0-9 .?!-]*$/)]],
+        Validators.pattern(this.allowedPattern)]],
       multiple: [false],
       options: this.formbuilder.array([])
     });
@@ -60,7 +63,7 @@ export class SurveyCreate {
     return this.formbuilder.group({
       optionTitle: ['', [
         Validators.required,
-        Validators.pattern(/^[a-zA-ZäöüÄÖÜß0-9 .?!-]*$/)]]
+        Validators.pattern(this.allowedPattern)]]
     })
   }
 
