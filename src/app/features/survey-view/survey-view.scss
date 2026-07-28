@@ -5,9 +5,10 @@ app-result-section {
     display: flex;
 }
 
-app-view-section{
+app-view-section {
     flex: 2;
 }
+
 app-result-section {
     flex: 1;
     flex-direction: column;
@@ -23,6 +24,54 @@ app-result-section {
 
             @media (max-width: 1600px) {
                 @include mx.flex-direction-align-justify-gap(column, flex-start, flex-start, 56px);
+            }
+        }
+
+        &__logo-and-create-btn {
+            @include mx.flex-direction-align-justify-gap(row, center, space-between);
+            width: 100%;
+        }
+    }
+}
+
+.hero-btn-cta {
+    background-color: var(--secondary_orange);
+    color: var(--primary_purple);
+    padding: 12px 16px;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    font-size: mx.px-to-rem(18);
+    font-weight: 700;
+    font-style: bold;
+    margin-bottom: mx.calculate-clamp(42px, 54px);
+
+    @media (max-width: 768px){
+        display: none;
+    }
+
+    .hero-btn-cta__icon {
+        width: 20px;
+        height: 20px;
+        margin-left: 10px;
+        transform: translateY(2px);
+    }
+
+    @media (pointer: fine) and (hover:hover) {
+        .hero-btn-cta__icon {
+            width: 0;
+            transform: translateY(2px);
+            margin-left: 0px;
+            overflow: hidden;
+            transition: all 0.3s ease-out;
+        }
+
+        &:hover {
+            background-color: var(--primary_orange);
+
+            .hero-btn-cta__icon {
+                width: 20px;
+                margin-left: 10px;
             }
         }
     }

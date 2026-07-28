@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ModalDialog } from '../../../../shared/services/modal-dialog';
+import { DialogPopover } from '../../../../shared/services/dialog-popover';
 
 @Component({
   selector: 'app-hero-section',
@@ -9,5 +9,5 @@ import { ModalDialog } from '../../../../shared/services/modal-dialog';
 })
 export class HeroSection {
 
-  modalDialog = inject(ModalDialog);
+  DialogPopover = inject(DialogPopover);
 }

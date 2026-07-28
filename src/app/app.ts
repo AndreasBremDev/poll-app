@@ -1,7 +1,7 @@
 import { Component, signal, HostBinding, inject, effect, ElementRef, ViewChild } from '@angular/core';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs';
-import { ModalDialog } from './shared/services/modal-dialog';
+import { DialogPopover } from './shared/services/dialog-popover';
 import { SurveyCreate } from './features/survey-create/survey-create';
 
 @Component({
@@ -17,7 +17,7 @@ export class App {
   protected readonly title = signal('poll-app');
 
   private router = inject(Router);
-  modalDialog = inject(ModalDialog);
+  DialogPopover = inject(DialogPopover);
 
   @ViewChild('surveyDialog') dialogRef!: ElementRef<HTMLDialogElement>;
 
@@ -31,7 +31,7 @@ export class App {
     });
 
     effect(() => {
-      const isOpen = this.modalDialog.isCreateSurveyModalOpen();
+      const isOpen = this.DialogPopover.isCreateSurveyModalOpen();
       if (!this.dialogRef) return;
       const dialog = this.dialogRef.nativeElement;
       if (isOpen) {

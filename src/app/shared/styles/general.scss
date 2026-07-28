@@ -84,4 +84,8 @@ select {
 
 .servey__logo {
     margin-bottom: mx.calculate-clamp(42px, 54px);
+
+    &--survey-view {
+        cursor: pointer;
+    }
 }

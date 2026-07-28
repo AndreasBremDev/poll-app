@@ -43,7 +43,7 @@
     </section>
 
     @if (!hasVotedCurrentPoll()) {
-    <button class="view-section__box__child__vote-button" [disabled]="!isPollValid()" (click)="uploadPollVotes()">
+    <button class="view-section__box__child__vote-button" [disabled]="!isPollValid()" (click)="uploadPollVotes(anchorBtn, popoverRef);" #anchorBtn> <!-- onSubmit(anchorBtn, popoverRef) -->
         Complete survey
     </button>
     } @else {
@@ -53,4 +53,9 @@
     }
 
 </article>
+<section style="anchor-name:--my-section; display:block; position:relative">
+    <div class="create__overlay__published nerko" popover id="published" #popoverRef>
+        You've voted successfully
+    </div>
+</section>
 }

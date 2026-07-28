@@ -153,6 +153,17 @@
                 margin-top: 40px;
             }
 
+            &__error-message {
+                grid-column: 1 / -1;
+                border: 1px solid red;
+                color: white;
+                font-size: 18px;
+                font-weight: 700;
+                font-style: bold;
+                text-shadow: 2px 1px 3px red;
+                letter-spacing: 2px;
+            }
+
             &__title {
                 margin-bottom: 8px;
             }
@@ -411,11 +422,19 @@
             &:has(select:focus-within)::after {
                 transform: translateY(-50%) rotate(180deg);
             }
+
+            &:has(select.ng-invalid.ng-touched) {
+                outline: 3px solid red;
+                border-radius: 5px 20px 5px 5px;
+
+            }
+
         }
 
         &__mandatory {
             margin-top: 40px;
         }
+
     }
 }
 
@@ -456,6 +475,9 @@ select {
     -webkit-appearance: none;
     appearance: none;
     width: 100%;
+    font-size: mx.px-to-rem(18);
+    font-weight: 700;
+    font-style: bold;
 }
 
 select:hover,

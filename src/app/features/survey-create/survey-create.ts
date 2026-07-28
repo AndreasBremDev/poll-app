@@ -1,11 +1,13 @@
-import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
-import { ModalDialog } from '../../shared/services/modal-dialog';
+import { Component, computed, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { DialogPopover } from './../../shared/services/dialog-popover';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Supabase } from '../../shared/services/supabase';
 import { limitYearLengthToFourDigits } from './../../shared/validators/custom-validators';
 import { IndexToLetterPipe } from '../../shared/pipes/index-to-letter.pipe';
 import { dateValidator } from './../../shared/validators/custom-validators'
 import { SurveyFormValue } from '../../shared/interfaces/interface';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-survey-create',
@@ -15,14 +17,15 @@ import { SurveyFormValue } from '../../shared/interfaces/interface';
 })
 export class SurveyCreate {
 
-  modalDialog = inject(ModalDialog)
-
-  selectedCategory = signal<string>('all');
+  dialogPopover = inject(DialogPopover)
+  supabase = inject(Supabase)
+  router = inject(Router)
+  popover = viewChild<ElementRef<HTMLElement>>('popoverRef');
 
   formbuilder = inject(FormBuilder)
   readonly allowedPattern = /^[a-zA-ZäöüÄÖÜß0-9 .,?!&()-]*$/;
+  selectedCategory = signal<string>('all');
 
-  supabase = inject(Supabase)
 
   thisYearPlusTwo = new Date().getFullYear() + 2;
   minDate = new Date().toISOString().split('T')[0];
@@ -71,6 +74,49 @@ export class SurveyCreate {
     this.addQuestion();
   }
 
+
+
+
+  lastTouchedField = signal<string | null>(null);
+
+  onBlur(fieldName: string): void {
+    this.lastTouchedField.set(fieldName)
+  }
+
+  errorMessage = computed(() => {
+    const fieldName = this.lastTouchedField();
+    if (!fieldName) return '';
+    const control = this.userform.get(fieldName);
+    if (!control || control.valid || !control.errors) return '';
+    const firstErrorKey = Object.keys(control.errors)[0]
+    switch (firstErrorKey) {
+
+      case 'pattern':
+        return `letters, numbers and ".,?!&()-" are allowed`
+      case 'minlength':
+        return `${fieldName}: minimum length is ${control.errors['minlength'].requiredLength}`;
+      case 'maxlength':
+        return `${fieldName}: maximum length is ${control.errors['maxlength'].requiredLength}`;
+      case 'pattern':
+        return `'${fieldName}' contains invalid characters`;
+      case 'minDate':
+        return `'${fieldName}' must be today or within 2 years`;
+      case 'maxYear':
+        return `'${fieldName}' year exceeds allowed range`;
+      case 'invalidDate':
+        return `'${fieldName}' is not a valid date`;
+      case 'required':
+        return `'${fieldName}' is required`;
+      default:
+        return `'${fieldName}' is invalid`;
+    }
+  });
+
+
+
+
+
+
   onYearInput(event: Event): void {
     limitYearLengthToFourDigits(event, this.userform);
   }
@@ -118,6 +164,8 @@ export class SurveyCreate {
   }
 
   clearOrRemoveItem(control: AbstractControl | null, array: FormArray, index: number, minLength: number): void {
+    console.log('Control:', control);
+    console.log('Control Value:', control?.value);
     if (control && control.value.trim() !== '') {
       control.setValue('');
       control.markAsUntouched();
@@ -128,7 +176,7 @@ export class SurveyCreate {
     }
   }
 
-  clearField(formField: string) {
+  clearField(formField: string): void {
     this.userform.get(formField)?.reset('')
   }
 
@@ -138,7 +186,7 @@ export class SurveyCreate {
       input.value = input.value.trim();
       /* Signal an Angular: Wert geändert, FormControl aktualiert */
       input.dispatchEvent(new Event('input'));
-    }    
+    }
   }
 
   onChangeCategory(event: Event): void {
@@ -148,88 +196,44 @@ export class SurveyCreate {
     selectElement.blur();
   }
 
-  async onSubmit(anchorBtn: HTMLElement, popoverRef: HTMLElement) {
-  if (this.userform.valid) {
-    try {
-      this.userform.setErrors({customError: true});
-      const formValue = this.userform.value as SurveyFormValue;
-      await this.supabase.saveSurvey(formValue);
-      this.openPublishedPopover(anchorBtn, popoverRef)
-      setTimeout(() => {this.closeModal()},1500);
-    } catch (err) {
-      console.error('upload to supabase error', err)
-    }
-  }
-}
-
-  private popover = viewChild<ElementRef<HTMLElement>>('popoverRef');
-
-  openPopover() {
-    const elem = this.popover()?.nativeElement;
-    if (elem) {
-      if (typeof elem.showPopover === 'function') {
-        elem.showPopover();
-        setTimeout(() => this.closePopover(), 1500);
-      } else {
-        elem.classList.add('is-open');
-        setTimeout(() => {
-          elem.classList.remove('is-open');
-        }, 1500);
+  async onSubmit(anchorBtn: HTMLElement, popoverRef: HTMLElement): Promise<void> {
+    if (this.userform.valid) {
+      try {
+        this.userform.setErrors({ customError: true });
+        const formValue = this.userform.value as SurveyFormValue;
+        await this.supabase.saveSurvey(formValue);
+        this.dialogPopover.openPublishedPopover(anchorBtn, popoverRef)
+        setTimeout(() => { this.closeModal(true) }, 1500);
+      } catch (err) {
+        console.error('upload to supabase error', err)
       }
     }
   }
 
-  closePopover() {
-    const elem = this.popover()?.nativeElement;
-    if (elem) {
-      if (typeof elem.hidePopover === 'function') {
-        elem.hidePopover();
-      } else {
-        elem.classList.remove('is-open');
-      }
-    }
-  }
-
-  openPublishedPopover(anchor: HTMLElement, popover: HTMLElement) {
-    popover.showPopover(); /* 1. Popover kurz bereitstellen für die Maße */
-    let { leftPosition, padding, popoverWidth, viewportWidth, topPosition } = this.defineProperties(anchor, popover);
-    /*  2. Button-Position und Popover-Maße holen, 3. Höhe berechnen, 
-        4a. Breite berechnen mit Randschutz (Safe Guard, 10px Mindestabstand zum Bildschirmrand), 
-        4b. Berechne idealen left-Wert (rechtsbündig zum Button) */
-    leftPosition = this.recalculatePopoverPosition(leftPosition, padding, popoverWidth, viewportWidth);
-    popover.style.top = `${topPosition}px`; /* 5. Styles zuweisen */
-    popover.style.left = `${leftPosition}px`;
-    setTimeout(() => this.closePopover(), 1500);
-  }
 
 
-  private defineProperties(anchor: HTMLElement, popover: HTMLElement) {
-    const rect = anchor.getBoundingClientRect();
-    const popoverWidth = popover.offsetWidth;
-    const popoverHeight = popover.offsetHeight;
-    const viewportWidth = window.innerWidth; /* Die Gesamtbreite des Bildschirms */
-    const gap = 15;
-    const topPosition = rect.top - popoverHeight - gap;
-    const padding = 10;
-    let leftPosition = rect.right - popoverWidth;
-    return { leftPosition, padding, popoverWidth, viewportWidth, topPosition };
-  }
-
-  private recalculatePopoverPosition(leftPosition: number, padding: number, popoverWidth: number, viewportWidth: number) {
-    /* Fehlerschutz LINKS: Verhindert, dass das Popover links aus dem Bildschirm ragt */
-    if (leftPosition < padding) {
-      leftPosition = padding;
-    }
-    /* Fehlerschutz RECHTS: Verhindert, dass es rechts hinausragt (falls der Button sehr weit rechts liegt) */
-    if (leftPosition + popoverWidth > viewportWidth - padding) {
-      leftPosition = viewportWidth - popoverWidth - padding;
-    }
-    return leftPosition;
-  }
-
-  closeModal() {
+  closeModal(isSubmit: boolean = false) {
+    this.resetQuestionsArray();
     this.userform.reset({ category: '' })
-    this.modalDialog.isCreateSurveyModalOpen.set(false);
+    this.dialogPopover.isCreateSurveyModalOpen.set(false);
+    if (isSubmit) { this.router.navigate(['']) }
   }
+
+  resetQuestionsArray(): void {
+    while (this.questions.length > 1) {
+      this.questions.removeAt(this.questions.length - 1);
+    }
+    const firstQuestion = this.questions.at(0);
+    if (firstQuestion) {
+      const options = firstQuestion.get('options') as FormArray;
+      while (options.length > 2) {
+        options.removeAt(options.length - 1);
+      }
+      while (options.length < 2) {
+        this.addOption(0);
+      }
+    }
+  }
+
 
 }

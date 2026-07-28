@@ -4,6 +4,7 @@ import { Supabase } from '../../../../shared/services/supabase';
 import { Poll } from '../../../../shared/interfaces/interface';
 import { IndexToLetterPipe } from '../../../../shared/pipes/index-to-letter.pipe';
 import { SinglePollVotes, PollVotesStorage } from '../../../../shared/interfaces/interface';
+import { DialogPopover } from '../../../../shared/services/dialog-popover';
 
 @Component({
   selector: 'app-view-section',
@@ -15,7 +16,8 @@ import { SinglePollVotes, PollVotesStorage } from '../../../../shared/interfaces
 })
 export class ViewSection {
   supabase = inject(Supabase);
-  private router = inject(Router);
+  router = inject(Router);
+  dialogPopover = inject(DialogPopover)
 
   currentPollView = model<Poll | undefined>();
   selectedOptions = signal<SinglePollVotes>({});
@@ -120,7 +122,7 @@ export class ViewSection {
     }));
   }
 
-  async uploadPollVotes() {
+  async uploadPollVotes(anchorBtn: HTMLElement, popoverRef: HTMLElement) {
     if (this.isPollValid()) {
       const poll = this.currentPollView();
       if (!poll) return;
@@ -128,13 +130,15 @@ export class ViewSection {
       this.createOptIdAndOptVoteArray_uploadPollVotes(poll, optionsToUpload);
       await this.sendOptionsToDatabaseSupabase_uploadPollVotes(optionsToUpload);
       this.saveToLocalStorage();
+      this.dialogPopover.openPublishedPopover(anchorBtn, popoverRef);
+      setTimeout(()=> this.router.navigate(['']), 1500);
     }
   }
 
   private async sendOptionsToDatabaseSupabase_uploadPollVotes(optionsToUpload: { id: number; vote: number; }[]) {
     try {
       await this.supabase.upsertVoteData(optionsToUpload);
-      this.router.navigate(['']);
+
     } catch (err) {
       console.error('Upload war NICHT erfolgreich - etwas ist schiefgegangen: ', err);
     }
