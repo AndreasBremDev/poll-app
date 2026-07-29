@@ -42,27 +42,15 @@ export class ViewSection {
     return { count: poll.questions.length, answeredCount, hasMultiple: poll.questions.length > 1, isAllAnswered: answeredCount === poll.questions.length, isSomeAnswered: answeredCount > 0 }
   })
 
-  readonly isPollStartedButNotCompleted = computed(() => {
+  isPollStartedButNotCompleted = computed(() => {
     const status = this.questionAnswersStatus();
     return status.hasMultiple && status.isSomeAnswered && !status.isAllAnswered;
   });
 
-  // 3. Bestehendes Signal: Wiederverwendung ohne Code-Duplizierung
-  readonly isPollValid = computed(() => {
+  isPollValid = computed(() => {
     const status = this.questionAnswersStatus();
     return status.isAllAnswered && !this.hasVotedCurrentPoll();
   });
-
-  // isPollValid = computed(() => {
-  //   const poll = this.currentPollView();
-  //   const memory = this.selectedOptions();
-  //   if (!poll) return false;
-  //   const allQuestionsAnswered = poll.questions.every(pq => {
-  //     const questionId = pq.id;
-  //     return memory[questionId] !== undefined && memory[questionId].length > 0
-  //   })
-  //   return allQuestionsAnswered && !this.hasVotedCurrentPoll();
-  // });
 
   isPollDisabled = computed(() => {
     if (this.hasVotedCurrentPoll()) return true;

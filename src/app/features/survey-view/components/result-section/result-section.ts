@@ -16,6 +16,8 @@ export class ResultSection {
 
   currentPollResult = model<Poll | undefined>()
 
+  questionVoteSum = 0;
+  
   pollVoteTotal = computed(() => {
     const poll = this.currentPollResult();
     if (!poll) return 0;
@@ -23,10 +25,7 @@ export class ResultSection {
       const questionSum = q.options.reduce((sum, opt) => sum + opt.vote, 0);
       return grandTotal + questionSum;
     }, 0);
-});
-
-questionVoteSum = 0;
-
+  });
 
 
 }

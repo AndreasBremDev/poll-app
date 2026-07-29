@@ -73,9 +73,6 @@ export class SurveyCreate {
     this.addQuestion();
   }
 
-
-
-
   onFieldBlur(controlOrFieldname: string | AbstractControl | null, anchorElem: HTMLElement, popoverElem: HTMLElement): void {
     let control: AbstractControl | null;
     if (typeof controlOrFieldname === 'string') {
@@ -104,10 +101,6 @@ export class SurveyCreate {
     if (control.errors['pattern']) return 'Only .,-?!&() and letters and numbers allowed';
     return 'Invalid field';
   }
-
-
-
-
 
   onYearInput(event: Event): void {
     limitYearLengthToFourDigits(event, this.userform);
@@ -225,6 +218,5 @@ export class SurveyCreate {
       }
     }
   }
-
 
 }
