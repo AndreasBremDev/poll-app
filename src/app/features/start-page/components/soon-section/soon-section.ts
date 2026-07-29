@@ -17,7 +17,7 @@ export class SoonSection {
     const allPolls = this.supabase.polls();
     return allPolls.filter(
       (poll): poll is Poll & { daysLeft: number } => 
-      poll.daysLeft !== null && poll.daysLeft >= 0
+      poll.daysLeft !== null && poll.daysLeft >= 0 && poll.daysLeft <=7
     );
   });
 

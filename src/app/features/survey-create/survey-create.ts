@@ -20,12 +20,11 @@ export class SurveyCreate {
   dialogPopover = inject(DialogPopover)
   supabase = inject(Supabase)
   router = inject(Router)
-  popover = viewChild<ElementRef<HTMLElement>>('popoverRef');
 
   formbuilder = inject(FormBuilder)
   readonly allowedPattern = /^[a-zA-ZäöüÄÖÜß0-9 .,?!&()-]*$/;
   selectedCategory = signal<string>('all');
-
+  isSubmitting = signal(false);
 
   thisYearPlusTwo = new Date().getFullYear() + 2;
   minDate = new Date().toISOString().split('T')[0];
@@ -77,41 +76,34 @@ export class SurveyCreate {
 
 
 
-  lastTouchedField = signal<string | null>(null);
-
-  onBlur(fieldName: string): void {
-    this.lastTouchedField.set(fieldName)
+  onFieldBlur(controlOrFieldname: string | AbstractControl | null, anchorElem: HTMLElement, popoverElem: HTMLElement): void {
+    let control: AbstractControl | null;
+    if (typeof controlOrFieldname === 'string') {
+      control = this.userform.get(controlOrFieldname);
+    } else {
+      control = controlOrFieldname;
+    }
+    control?.markAsTouched();
+    if (control && control.invalid) {
+      this.dialogPopover.openPopover(anchorElem, popoverElem);
+    }
   }
 
-  errorMessage = computed(() => {
-    const fieldName = this.lastTouchedField();
-    if (!fieldName) return '';
-    const control = this.userform.get(fieldName);
-    if (!control || control.valid || !control.errors) return '';
-    const firstErrorKey = Object.keys(control.errors)[0]
-    switch (firstErrorKey) {
-
-      case 'pattern':
-        return `letters, numbers and ".,?!&()-" are allowed`
-      case 'minlength':
-        return `${fieldName}: minimum length is ${control.errors['minlength'].requiredLength}`;
-      case 'maxlength':
-        return `${fieldName}: maximum length is ${control.errors['maxlength'].requiredLength}`;
-      case 'pattern':
-        return `'${fieldName}' contains invalid characters`;
-      case 'minDate':
-        return `'${fieldName}' must be today or within 2 years`;
-      case 'maxYear':
-        return `'${fieldName}' year exceeds allowed range`;
-      case 'invalidDate':
-        return `'${fieldName}' is not a valid date`;
-      case 'required':
-        return `'${fieldName}' is required`;
-      default:
-        return `'${fieldName}' is invalid`;
+  getFieldError(controlOrFieldname: string | AbstractControl | null): string {
+    let control: AbstractControl | null;
+    if (typeof controlOrFieldname === 'string') {
+      control = this.userform.get(controlOrFieldname);
+    } else {
+      control = controlOrFieldname;
     }
-  });
-
+    if (!control || !control.errors || !control.touched) return '';
+    if (control.errors['required']) return 'This field is required';
+    if (control.errors['minlength']) return 'Type at least 3 characters';
+    if (control.errors['minDate']) return 'Date should be minimum today';
+    if (control.errors['invalidDate']) return 'Date is not within today plus two years';
+    if (control.errors['pattern']) return 'Only .,-?!&() and letters and numbers allowed';
+    return 'Invalid field';
+  }
 
 
 
@@ -197,26 +189,25 @@ export class SurveyCreate {
   }
 
   async onSubmit(anchorBtn: HTMLElement, popoverRef: HTMLElement): Promise<void> {
-    if (this.userform.valid) {
-      try {
-        this.userform.setErrors({ customError: true });
-        const formValue = this.userform.value as SurveyFormValue;
-        await this.supabase.saveSurvey(formValue);
-        this.dialogPopover.openPublishedPopover(anchorBtn, popoverRef)
-        setTimeout(() => { this.closeModal(true) }, 1500);
-      } catch (err) {
-        console.error('upload to supabase error', err)
-      }
+    if (this.userform.invalid || this.isSubmitting()) return;
+    try {
+      this.isSubmitting.set(true);
+      const formValue = this.userform.value as SurveyFormValue;
+      await this.supabase.saveSurvey(formValue);
+      this.dialogPopover.openPopover(anchorBtn, popoverRef)
+      setTimeout(() => { this.closeModal(true) }, 1500);
+    } catch (err) {
+      console.error('Error at upload votes to supabase:', err)
+      this.isSubmitting.set(false);
     }
   }
-
-
 
   closeModal(isSubmit: boolean = false) {
     this.resetQuestionsArray();
     this.userform.reset({ category: '' })
     this.dialogPopover.isCreateSurveyModalOpen.set(false);
     if (isSubmit) { this.router.navigate(['']) }
+    this.isSubmitting.set(false);
   }
 
   resetQuestionsArray(): void {

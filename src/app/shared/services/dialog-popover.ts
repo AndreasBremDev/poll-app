@@ -15,47 +15,17 @@ export class DialogPopover {
     this.isCreateSurveyModalOpen.set(false);
   }
 
-  // openPopover(): void {
-  //   const elem = this.popover()?.nativeElement;
-  //   if (elem) {
-  //     if (typeof elem.showPopover === 'function') {
-  //       elem.showPopover();
-  //       setTimeout(() => this.closePopover(), 1500);
-  //     } else {
-  //       elem.classList.add('is-open');
-  //       setTimeout(() => {
-  //         elem.classList.remove('is-open');
-  //       }, 1500);
-  //     }
-  //   }
-  // }
-
-  openPopover(popoverElem: HTMLElement): void {
+  popoverShown(popoverElem: HTMLElement): void {
     if (!popoverElem) return;
-
     if (typeof popoverElem.showPopover === 'function') {
       popoverElem.showPopover();
-      setTimeout(() => this.closePopover(popoverElem), 1500);
     } else {
       popoverElem.classList.add('is-open');
-      setTimeout(() => this.closePopover(popoverElem), 1500);
     }
   }
 
-  // closePopover(): void {
-  //   const elem = this.popover()?.nativeElement;
-  //   if (elem) {
-  //     if (typeof elem.hidePopover === 'function') {
-  //       elem.hidePopover();
-  //     } else {
-  //       elem.classList.remove('is-open');
-  //     }
-  //   }
-  // }
-
-  closePopover(popoverElem: HTMLElement): void {
+  popoverUnshown(popoverElem: HTMLElement): void {
     if (!popoverElem) return;
-
     if (typeof popoverElem.hidePopover === 'function') {
       popoverElem.hidePopover();
     } else {
@@ -63,8 +33,8 @@ export class DialogPopover {
     }
   }
 
-  openPublishedPopover(anchor: HTMLElement, popover: HTMLElement) {
-    popover.showPopover(); /* 1. Briefly display the popover for the dimensions. */
+  openPopover(anchor: HTMLElement, popover: HTMLElement) {
+    this.popoverShown(popover); /* 1. Briefly display the popover for the dimensions. */
     let { leftPosition, padding, popoverWidth, viewportWidth, topPosition } = this.defineProperties(anchor, popover);
     /*  2. Get button position and popover dimensions, 3. Calculate height, 
         4a. Calculate width with edge clearance (Safe Guard, 10px minimum distance from the screen edge), 
@@ -72,7 +42,7 @@ export class DialogPopover {
     leftPosition = this.recalculatePopoverPosition(leftPosition, padding, popoverWidth, viewportWidth);
     popover.style.top = `${topPosition}px`; /* 5. assign styles */
     popover.style.left = `${leftPosition}px`;
-    setTimeout(() => this.closePopover(popover), 1500);
+    setTimeout(() => this.popoverUnshown(popover), 1500);
   }
 
 

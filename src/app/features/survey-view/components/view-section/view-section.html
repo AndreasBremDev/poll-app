@@ -43,19 +43,18 @@
     </section>
 
     @if (!hasVotedCurrentPoll()) {
-    <button class="view-section__box__child__vote-button" [disabled]="!isPollValid()" (click)="uploadPollVotes(anchorBtn, popoverRef);" #anchorBtn> <!-- onSubmit(anchorBtn, popoverRef) -->
-        Complete survey
+    <button class="view-section__box__child__vote-button" [disabled]="!isPollValid()"
+        (click)="uploadPollVotes(anchorBtn, popoverRef);" #anchorBtn>
+        @if (isPollStartedButNotCompleted()){Complete all questions} @else { Complete survey }
     </button>
     } @else {
     <div class="view-section__box__child__voted-badge">
         I completed the survey already
     </div>
     }
-
 </article>
-<section style="anchor-name:--my-section; display:block; position:relative">
-    <div class="create__overlay__published nerko" popover id="published" #popoverRef>
-        You've voted successfully
-    </div>
-</section>
+
+<div class="popover nerko" popover id="published" #popoverRef>
+    You've voted successfully
+</div>
 }

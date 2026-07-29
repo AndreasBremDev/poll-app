@@ -29,16 +29,40 @@ export class ViewSection {
     return !!this.pollVotesStorage()[currentPollId];
   });
 
-  isPollValid = computed(() => {
+  questionAnswersStatus = computed(() => {
     const poll = this.currentPollView();
     const memory = this.selectedOptions();
-    if (!poll) return false;
-    const allQuestionsAnswered = poll.questions.every(pq => {
-      const questionId = pq.id;
-      return memory[questionId] !== undefined && memory[questionId].length > 0
-    })
-    return allQuestionsAnswered && !this.hasVotedCurrentPoll();
+    if (!poll || poll.questions.length === 0) {
+      return { count: 0, answeredCount: 0, hasMultiple: false, isAllAnswered: false, isSomeAnswered: false }
+    }
+    const answeredCount = poll.questions.filter(pq => {
+      const selected = memory[pq.id];
+      return selected !== undefined && selected.length > 0;
+    }).length
+    return { count: poll.questions.length, answeredCount, hasMultiple: poll.questions.length > 1, isAllAnswered: answeredCount === poll.questions.length, isSomeAnswered: answeredCount > 0 }
+  })
+
+  readonly isPollStartedButNotCompleted = computed(() => {
+    const status = this.questionAnswersStatus();
+    return status.hasMultiple && status.isSomeAnswered && !status.isAllAnswered;
   });
+
+  // 3. Bestehendes Signal: Wiederverwendung ohne Code-Duplizierung
+  readonly isPollValid = computed(() => {
+    const status = this.questionAnswersStatus();
+    return status.isAllAnswered && !this.hasVotedCurrentPoll();
+  });
+
+  // isPollValid = computed(() => {
+  //   const poll = this.currentPollView();
+  //   const memory = this.selectedOptions();
+  //   if (!poll) return false;
+  //   const allQuestionsAnswered = poll.questions.every(pq => {
+  //     const questionId = pq.id;
+  //     return memory[questionId] !== undefined && memory[questionId].length > 0
+  //   })
+  //   return allQuestionsAnswered && !this.hasVotedCurrentPoll();
+  // });
 
   isPollDisabled = computed(() => {
     if (this.hasVotedCurrentPoll()) return true;
@@ -55,13 +79,13 @@ export class ViewSection {
       if (!currentPollId) return;
       const storage = this.pollVotesStorage();
       const savedVotes = storage[currentPollId];
-      if (savedVotes){
+      if (savedVotes) {
         this.selectedOptions.set(savedVotes)
       }
     })
   }
 
-  isOptionSelected(questionId:number, optionId: number): boolean {
+  isOptionSelected(questionId: number, optionId: number): boolean {
     const selectedForQuestion = this.selectedOptions()[questionId];
     return selectedForQuestion ? selectedForQuestion.includes(optionId) : false;
   }
@@ -130,15 +154,14 @@ export class ViewSection {
       this.createOptIdAndOptVoteArray_uploadPollVotes(poll, optionsToUpload);
       await this.sendOptionsToDatabaseSupabase_uploadPollVotes(optionsToUpload);
       this.saveToLocalStorage();
-      this.dialogPopover.openPublishedPopover(anchorBtn, popoverRef);
-      setTimeout(()=> this.router.navigate(['']), 1500);
+      this.dialogPopover.openPopover(anchorBtn, popoverRef);
+      setTimeout(() => this.router.navigate(['']), 1500);
     }
   }
 
   private async sendOptionsToDatabaseSupabase_uploadPollVotes(optionsToUpload: { id: number; vote: number; }[]) {
     try {
       await this.supabase.upsertVoteData(optionsToUpload);
-
     } catch (err) {
       console.error('Upload war NICHT erfolgreich - etwas ist schiefgegangen: ', err);
     }

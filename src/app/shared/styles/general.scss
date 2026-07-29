@@ -89,3 +89,44 @@ select {
         cursor: pointer;
     }
 }
+
+.popover {
+    width: mx.calculate-clamp(296px, 400px);
+    justify-content: space-between;
+    align-items: flex-start;
+    font-size: mx.px-to-rem(24);
+    color: var(--primary_purple);
+    background-color: var(--secondary_orange);
+    padding: 14px 26px;
+    border-radius: 5px 50px 5px 5px;
+    outline: none;
+    border: none;
+
+    position: fixed;
+    margin: 0;
+
+    transition:
+        opacity 0.4s ease-in-out,
+        transform 0.4s ease-in-out,
+        display 0.4s ease-in-out allow-discrete,
+        overlay 0.4s ease-in-out allow-discrete;
+
+    &:not(:popover-open) {
+        display: none;
+        opacity: 0;
+        transform: translateY(15px);
+        animation: fade-out-popover 0.4s ease-in-out;
+    }
+
+    &:popover-open {
+        display: flex;
+        opacity: 1;
+        transform: translateY(0);
+        animation: none;
+
+        @starting-style {
+            opacity: 0;
+            transform: translateY(15px);
+        }
+    }
+}
