@@ -15,11 +15,30 @@ dialog[open] {
     padding: 40px 60px;
     z-index: 10;
 
-    @media (max-width: 768px){
+    /* Firefox */
+    scrollbar-color: var(--primary_orange-disabled)
+        /* rgba(0, 0, 0, 0.3) */
+        transparent;
+
+    /* Chrome/Edge/Safari */
+    &::-webkit-scrollbar {
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+    }
+
+    @media (max-width: 768px) {
         padding: 20px 12px;
     }
 
-    @media (max-width: 593px){
+    @media (max-width: 593px) {
         width: 100%;
     }
 
@@ -27,4 +46,13 @@ dialog[open] {
         background: rgba(0, 0, 0, 0.2);
         backdrop-filter: blur(4px);
     }
+}
+
+app-survey-create {
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    // display: flex;
+    // flex-direction: column;
+    box-sizing: border-box;
 }

@@ -26,6 +26,8 @@
         font-weight: 700;
         font-size: 18px;
         margin-bottom: 16px;
+        display: flex;
+        flex-shrink: 1;
     }
 
     &__index-letter {
@@ -41,6 +43,7 @@
         border-radius: 0 20px 20px 0;
         box-sizing: border-box;
         margin-left: 6px;
+        
 
         &--slider {
             background-color: var(--primary_orange);
@@ -48,6 +51,7 @@
             border-radius: 0 20px 20px 0;
             text-align: center;
             color: white;
+            transition: all 0.3s ease-in-out;
         }
     }
 

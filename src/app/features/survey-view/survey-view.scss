@@ -6,12 +6,14 @@ app-result-section {
 }
 
 app-view-section {
-    flex: 2;
+    flex: 0 1 auto;
+    max-width: 100%;
 }
 
 app-result-section {
-    flex: 1;
+    flex: 1 1 0px;
     flex-direction: column;
+    min-width: 290px
 
 }
 
@@ -20,11 +22,8 @@ app-result-section {
     &__box {
         &__servey-results {
             @include mx.flex-direction-align-justify-gap(row, flex-end, flex-start, 42px);
+            flex-wrap: wrap;
             width: 100%;
-
-            @media (max-width: 1600px) {
-                @include mx.flex-direction-align-justify-gap(column, flex-start, flex-start, 56px);
-            }
         }
 
         &__logo-and-create-btn {

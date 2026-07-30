@@ -5,9 +5,11 @@
         <p class="view-section__published">
             @if (!hasVotedCurrentPoll()) {published} @else {voted}</p>
         <div class="view-section__days-and-category">
-            <p class="">Ends in {{ poll.daysLeft }} @if (poll.daysLeft == 1 || poll.daysLeft ==
-                -1)
-                {day} @else {days}</p>
+            <p class="">@if (poll.daysLeft === null){
+                    No end date
+                } @else if (poll.daysLeft >= 0) {
+                Ends in {{ poll.daysLeft }} {{poll.daysLeft === 1 ? 'day' : 'days'}}
+                } @else {Ended}</p>
             <p>Category: {{ poll.categories.category }}</p>
         </div>
         <h3 class="view-section__title nerko orange">{{ poll.title }}</h3>
@@ -45,7 +47,7 @@
     @if (!hasVotedCurrentPoll()) {
     <button class="view-section__box__child__vote-button" [disabled]="!isPollValid()"
         (click)="uploadPollVotes(anchorBtn, popoverRef);" #anchorBtn>
-        @if (isPollStartedButNotCompleted()){Complete all questions} @else { Complete survey }
+        @if (isPollStartedButNotCompleted()){Complete all questions} @else if (poll.daysLeft !== null && poll.daysLeft < 0) {Survey ended} @else { Complete survey }
     </button>
     } @else {
     <div class="view-section__box__child__voted-badge">

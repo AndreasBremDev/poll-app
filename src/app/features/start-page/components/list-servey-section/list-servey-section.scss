@@ -73,10 +73,7 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 16px;
     margin-bottom: mx.calculate-clamp(16px, 48px);
-
-    &.active {
-      cursor: pointer;
-    }
+    cursor: pointer;
 
     @media (max-width: 768px) {
       grid-template-columns: 1fr;

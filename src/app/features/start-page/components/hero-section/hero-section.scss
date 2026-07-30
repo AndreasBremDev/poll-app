@@ -38,6 +38,7 @@
 
 .hero__section__image {
     background: center / contain no-repeat url("./../../../../assets/img/poll-img_pc.png");
+    transition: all 0.3s ease-in;
 }
 
 .hero__section__image--mobile {

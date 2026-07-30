@@ -18,7 +18,6 @@
             background-color: var(--secondary_purple);
             margin-top: mx.px-to-rem(32);
             overflow-y: auto;
-            max-height: 500px;
 
             @media (max-width: 768px) {
                 padding: 40px 10px;
@@ -131,6 +130,15 @@
                 }
             }
 
+            &__label-btn-mobile {
+                display: flex;
+                justify-content: space-between;
+
+                @media (max-width: 1024px) {
+                    width: 100%;
+                }
+            }
+
             &__question-option-details {
                 display: flex;
                 flex-direction: column;
@@ -159,6 +167,14 @@
                     font-size: mx.px-to-rem(16);
                     font-weight: 400;
                     font-style: normal;
+
+                    &__span {
+                        display: inline-block;
+
+                        @media (max-width: 360px) {
+                            display: none;
+                        }
+                    }
                 }
 
                 &__multiple input {
@@ -210,6 +226,11 @@
                 display: flex;
                 justify-content: space-between;
                 gap: 8px;
+
+                @media (max-width: 1024px) {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
             }
 
         }
@@ -307,7 +328,39 @@
             object-position: center;
             align-self: flex-start;
             transform: translateY(4px);
+
+            svg {
+                width: 26px;
+                height: 23px;
+            }
+
+            @media (pointer: fine) and (hover: hover) {
+                &:hover {
+                    svg path {
+                        fill: var(--primary_orange)
+                    }
+                }
+            }
+
+            @media (max-width: 1024px) {
+                display: none;
+            }
+
+            &--mobile {
+                display: none;
+
+                svg {
+                    width: 26px;
+                    height: 23px;
+                }
+
+                @media (max-width: 1024px) {
+                    display: flex;
+                    align-self: flex-end;
+                }
+            }
         }
+
 
         &__input {
             height: 37px;

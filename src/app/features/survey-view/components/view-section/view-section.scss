@@ -16,6 +16,7 @@
         &__child {
             &__title-section {
                 @include mx.flex-direction-align-justify-gap(column, flex-start, center, 8px);
+                min-width: 270px;
             }
 
             &__question-section {
@@ -55,9 +56,9 @@
 
     &__days-and-category {
         width: 100%;
-        @include mx.flex-direction-align-justify-gap(row, center, space-between);
+        @include mx.flex-direction-align-justify-gap(row, center, space-between, 8px);
 
-        @media (max-width: 455px) {
+        @media (max-width: 508px) {
             @include mx.flex-direction-align-justify-gap(column, flex-start, center, 4px);
         }
     }
@@ -122,7 +123,6 @@
         &__container input {
             position: absolute;
             opacity: 0;
-            cursor: pointer;
             height: 0;
             width: 0;
         }
@@ -132,7 +132,6 @@
             min-width: 21px;
             width: 21px;
             height: 21px;
-            cursor: pointer;
             background: center / contain no-repeat url("./../../../../assets/img/view-survey_option_unchecked.svg");
         }
 

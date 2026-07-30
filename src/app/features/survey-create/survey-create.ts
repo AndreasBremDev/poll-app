@@ -73,7 +73,10 @@ export class SurveyCreate {
     this.addQuestion();
   }
 
-  onFieldBlur(controlOrFieldname: string | AbstractControl | null, anchorElem: HTMLElement, popoverElem: HTMLElement): void {
+  onFieldBlur(controlOrFieldname: string | AbstractControl | null, anchorElem: HTMLElement, popoverElem: HTMLElement, event?: FocusEvent): void {
+    // const targetElement = event?.relatedTarget as HTMLElement | null;
+    // const isDeleting = targetElement?.dataset['deleteBtn'] === 'true';
+    // if (isDeleting) { return };
     let control: AbstractControl | null;
     if (typeof controlOrFieldname === 'string') {
       control = this.userform.get(controlOrFieldname);
@@ -84,6 +87,7 @@ export class SurveyCreate {
     if (control && control.invalid) {
       this.dialogPopover.openPopover(anchorElem, popoverElem);
     }
+
   }
 
   getFieldError(controlOrFieldname: string | AbstractControl | null): string {
@@ -149,8 +153,6 @@ export class SurveyCreate {
   }
 
   clearOrRemoveItem(control: AbstractControl | null, array: FormArray, index: number, minLength: number): void {
-    console.log('Control:', control);
-    console.log('Control Value:', control?.value);
     if (control && control.value.trim() !== '') {
       control.setValue('');
       control.markAsUntouched();
@@ -162,7 +164,11 @@ export class SurveyCreate {
   }
 
   clearField(formField: string): void {
-    this.userform.get(formField)?.reset('')
+    const control = this.userform.get(formField);
+    if (!control) return;
+    control.setValue('');
+    control.markAsUntouched();
+    control.markAsPristine();
   }
 
   trimControl(event: Event): void {
