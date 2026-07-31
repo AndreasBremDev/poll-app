@@ -130,11 +130,10 @@
                 }
             }
 
-            &__label-btn-mobile {
-                display: flex;
+            &__label-btn-mobile{
+                display: flex; 
                 justify-content: space-between;
-
-                @media (max-width: 1024px) {
+                @media (max-width: 1024px){
                     width: 100%;
                 }
             }
@@ -171,7 +170,7 @@
                     &__span {
                         display: inline-block;
 
-                        @media (max-width: 360px) {
+                        @media (max-width: 360px){
                             display: none;
                         }
                     }
@@ -227,7 +226,7 @@
                 justify-content: space-between;
                 gap: 8px;
 
-                @media (max-width: 1024px) {
+                @media (max-width: 1024px){
                     flex-direction: column;
                     align-items: flex-start;
                 }
@@ -427,7 +426,6 @@
             &:has(select.ng-invalid.ng-touched) {
                 outline: 3px solid red;
                 border-radius: 5px 20px 5px 5px;
-
             }
 
         }

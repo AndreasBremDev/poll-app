@@ -30,6 +30,8 @@ export class SurveyCreate {
   minDate = new Date().toISOString().split('T')[0];
   maxDate = `${this.thisYearPlusTwo}-12-31`
 
+  isDeletedInteracted: boolean = false;
+
   userform = this.formbuilder.group({
     title: ['', [
       Validators.required,
@@ -73,30 +75,74 @@ export class SurveyCreate {
     this.addQuestion();
   }
 
-  onFieldBlur(controlOrFieldname: string | AbstractControl | null, anchorElem: HTMLElement, popoverElem: HTMLElement, event?: FocusEvent): void {
-    // const targetElement = event?.relatedTarget as HTMLElement | null;
-    // const isDeleting = targetElement?.dataset['deleteBtn'] === 'true';
-    // if (isDeleting) { return };
-    let control: AbstractControl | null;
-    if (typeof controlOrFieldname === 'string') {
-      control = this.userform.get(controlOrFieldname);
-    } else {
-      control = controlOrFieldname;
+  onFieldBlur(controlOrFieldname: string | AbstractControl | null, anchorElem: HTMLElement, popoverElem: HTMLElement, event: FocusEvent): void {
+    if (typeof controlOrFieldname === 'string' && controlOrFieldname === 'enddate') {
+      this.checkNativeDateValidity(anchorElem  as HTMLInputElement, 'enddate');
     }
+    const control = this.resolveControl(controlOrFieldname);
+    if (!control) return;
+    this.trimControlValue(event);
+    if (this.handleDeleteIntent(control, event)) { /* check, if delete-btn is relatedTarget */
+      return;
+    }
+    this.validateAndShowPopover(control, anchorElem, popoverElem);
+  }
+
+  private resolveControl(controlOrFieldname: string | AbstractControl | null): AbstractControl | null {
+    if (!controlOrFieldname) return null;
+    if (typeof controlOrFieldname === 'string') {
+      return this.userform.get(controlOrFieldname);
+    }
+    return controlOrFieldname;
+  }
+
+  private trimControlValue(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input && input.value) {
+      input.value = input.value.trim();
+      input.dispatchEvent(new Event('input'));
+    }
+  }
+
+  private handleDeleteIntent(control: AbstractControl, event?: FocusEvent): boolean {
+    const targetElement = event?.relatedTarget as HTMLElement | null;
+    const isDeleting = targetElement?.dataset['deleteBtn'] === 'true';
+    if (isDeleting && this.isDeletedInteracted) {
+      this.isDeletedInteracted = false;
+      this.clearField(control);
+      return true; /* boolean for main-function to return */
+    }
+    this.isDeletedInteracted = false;
+    return false;
+  }
+
+  clearField(controlOrFieldname: string | AbstractControl | null): void {
+    const control = this.resolveControl(controlOrFieldname);
+    if (!control) return;
+    control.setValue('');
+    control.markAsUntouched();
+    control.markAsPristine();
+  }
+
+  private validateAndShowPopover(control: AbstractControl, anchorElem: HTMLElement, popoverElem: HTMLElement): void {
     control?.markAsTouched();
     if (control && control.invalid) {
       this.dialogPopover.openPopover(anchorElem, popoverElem);
     }
+  }
 
+  onLabelKeyDown(event: KeyboardEvent, checkboxId: string):void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      const checkbox = document.getElementById(checkboxId) as HTMLInputElement | null;
+      if (checkbox) {
+        checkbox.click();
+      }
+    }
   }
 
   getFieldError(controlOrFieldname: string | AbstractControl | null): string {
-    let control: AbstractControl | null;
-    if (typeof controlOrFieldname === 'string') {
-      control = this.userform.get(controlOrFieldname);
-    } else {
-      control = controlOrFieldname;
-    }
+    const control = this.resolveControl(controlOrFieldname);
     if (!control || !control.errors || !control.touched) return '';
     if (control.errors['required']) return 'This field is required';
     if (control.errors['minlength']) return 'Type at least 3 characters';
@@ -110,7 +156,7 @@ export class SurveyCreate {
     limitYearLengthToFourDigits(event, this.userform);
   }
 
-  checkNativeValidity(inputElement: HTMLInputElement, controlName: string): void {
+  checkNativeDateValidity(inputElement: HTMLInputElement, controlName: string): void {
     const control = this.userform.get(controlName);
     if (!inputElement.validity.valid) { /* validity.valid = false, when i.e. 'tt.01.0022' */
       control?.setErrors({ invalidDate: true }); /* set error manually in Angular FormControl */
@@ -160,23 +206,6 @@ export class SurveyCreate {
     }
     if (array.length > minLength) {
       array.removeAt(index);
-    }
-  }
-
-  clearField(formField: string): void {
-    const control = this.userform.get(formField);
-    if (!control) return;
-    control.setValue('');
-    control.markAsUntouched();
-    control.markAsPristine();
-  }
-
-  trimControl(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input && input.value) {
-      input.value = input.value.trim();
-      /* Signal an Angular: Wert geändert, FormControl aktualiert */
-      input.dispatchEvent(new Event('input'));
     }
   }
 

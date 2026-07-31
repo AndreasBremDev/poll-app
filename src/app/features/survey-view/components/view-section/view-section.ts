@@ -62,13 +62,17 @@ export class ViewSection {
   })
 
   constructor() {
+    let lastLoadedPollId: number | null = null;
+
     effect(() => {
-      const currentPollId = this.currentPollView()?.id;
-      if (!currentPollId) return;
-      const storage = this.pollVotesStorage();
-      const savedVotes = storage[currentPollId];
+      const poll = this.currentPollView();
+      if (!poll || poll.id === lastLoadedPollId) return;
+      lastLoadedPollId = poll.id;
+      const savedVotes = this.pollVotesStorage()[poll.id];
       if (savedVotes) {
-        this.selectedOptions.set(savedVotes)
+        this.selectedOptions.set(savedVotes);
+      } else {
+        this.selectedOptions.set({});
       }
     })
   }
@@ -128,6 +132,8 @@ export class ViewSection {
   }
 
   private updateRadioOptionsInSelectedOptions(questionId: number, optionId: number) {
+    const currentSelected = this.selectedOptions()[questionId];
+    if (currentSelected && currentSelected[0] ===optionId) return;
     this.selectedOptions.update(memory => ({
       ...memory,
       [questionId]: [optionId]

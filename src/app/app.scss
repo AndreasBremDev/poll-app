@@ -34,6 +34,11 @@ dialog[open] {
         border-radius: 10px;
     }
 
+    &::backdrop {
+        background: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(4px);
+    }
+
     @media (max-width: 768px) {
         padding: 20px 12px;
     }
@@ -42,10 +47,10 @@ dialog[open] {
         width: 100%;
     }
 
-    &::backdrop {
-        background: rgba(0, 0, 0, 0.2);
-        backdrop-filter: blur(4px);
+    @media (min-height: 1025px){
+        height:min-content;
     }
+
 }
 
 app-survey-create {
